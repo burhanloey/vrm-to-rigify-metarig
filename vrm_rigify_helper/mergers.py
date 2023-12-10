@@ -47,6 +47,8 @@ def merge_rigs(context):
     parent_bones(context, 'skirt', 'thigh', is_pair=True)
     parent_bones(context, 'coat_skirt', 'shin', is_pair=True)
     
+    bpy.ops.object.mode_set(mode='OBJECT')
+    
     
 class MergeRigs(bpy.types.Operator):
     """Make sure the metarig is the active object among the selection."""
