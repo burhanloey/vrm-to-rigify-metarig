@@ -11,6 +11,7 @@ from .layers import UpdateMetarigBoneLayers
 from .vertex_groups import RenameVRMVertexGroupsToRigify
 from .cleanup import RemoveUnusedBones
 from .wrapper import GenerateVRMMetaRigWrapper
+from .mergers import MergeRigs
 from .utils import SelectAllRootBones, SelectHairRootBones, SelectSkirtRootBones, SelectCoatSkirtRootBones
 
 
@@ -35,6 +36,9 @@ class VRMRigifyHelperSidebarPanel(bpy.types.Panel):
         
         row = layout.row()
         row.operator("vrm_rigify_helper.update_metarig_bone_layers")
+        
+        row = layout.row()
+        row.operator("vrm_rigify_helper.merge_rigs")
 
         row = layout.row()
         row.operator("vrm_rigify_helper.rename_vrm_vertex_groups_to_rigify")
@@ -67,6 +71,7 @@ CLASSES = [
     RenameVRMVertexGroupsToRigify,
     RemoveUnusedBones,
     GenerateVRMMetaRigWrapper,
+    MergeRigs,
     SelectAllRootBones,
     SelectHairRootBones,
     SelectSkirtRootBones,
