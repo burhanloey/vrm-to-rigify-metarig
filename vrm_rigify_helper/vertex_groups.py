@@ -45,34 +45,31 @@ BONE_SINGLES_MAPPINGS = {
 
 
 def rename_vrm_vertex_groups_to_rigify(context):
-    view_layer = context.view_layer
-    
-    active_mesh = view_layer.objects.active
+    objs = context.selected_objects
 
-    for vg in active_mesh.vertex_groups:
-        name = vg.name
-        
-        if len(name) <= 2:
-            continue
-        
-        if name in BONE_SINGLES_MAPPINGS:
-            new_name = 'DEF-' + BONE_SINGLES_MAPPINGS[name]
-            vg.name = new_name
-            continue
-        
-        part = name[:-2]
-        
-        if part in BONE_PAIRS_MAPPINGS:
-            direction = name[-1:]
-            new_name = 'DEF-' + BONE_PAIRS_MAPPINGS[part] + '.' + direction
-            vg.name = new_name
-            continue
-        
-        if not name.startswith('DEF-'):
-            new_name = 'DEF-' + name
-            vg.name = new_name
-        
-    active_mesh.select_set(True)
+    for obj in objs:
+        for vg in obj.vertex_groups:
+            name = vg.name
+            
+            if len(name) <= 2:
+                continue
+            
+            if name in BONE_SINGLES_MAPPINGS:
+                new_name = 'DEF-' + BONE_SINGLES_MAPPINGS[name]
+                vg.name = new_name
+                continue
+            
+            part = name[:-2]
+            
+            if part in BONE_PAIRS_MAPPINGS:
+                direction = name[-1:]
+                new_name = 'DEF-' + BONE_PAIRS_MAPPINGS[part] + '.' + direction
+                vg.name = new_name
+                continue
+            
+            if not name.startswith('DEF-'):
+                new_name = 'DEF-' + name
+                vg.name = new_name
 
 
 class RenameVRMVertexGroupsToRigify(bpy.types.Operator):
@@ -82,8 +79,13 @@ class RenameVRMVertexGroupsToRigify(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        obj = context.view_layer.objects.active
-        return (obj and obj.data and obj.type == 'MESH')
+        objs = context.selected_objects
+        if not objs:
+            return False
+        for obj in context.selected_objects:
+            if obj.type != 'MESH':
+                return False
+        return True
 
     def execute(self, context):
         rename_vrm_vertex_groups_to_rigify(context)
