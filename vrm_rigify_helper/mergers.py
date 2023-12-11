@@ -51,7 +51,7 @@ def merge_rigs(context):
     
     
 class MergeRigs(bpy.types.Operator):
-    """Make sure the metarig is the active object among the selection."""
+    """Make sure the metarig is the active object among the selection"""
     bl_idname = "vrm_rigify_helper.merge_rigs"
     bl_label = "Merge Rigs"
 

@@ -4,9 +4,9 @@ from .checks import is_vrm_rig
 
 
 class GenerateVRMMetaRigWrapper(bpy.types.Operator):
-    """Tooltip"""
+    """Generate using vrm-rigify plugin"""
     bl_idname = "vrm_rigify_helper.generate_vrm_meta_rig"
-    bl_label = "Generate VRM Meta Rig"
+    bl_label = "Generate VRM Meta-Rig"
 
     @classmethod
     def poll(cls, context):

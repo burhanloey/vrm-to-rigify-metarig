@@ -116,7 +116,7 @@ def remove_unused_bones(context):
 
 
 class RemoveUnusedBones(bpy.types.Operator):
-    """Tooltip"""
+    """Remove mostly the facial bones since facial expressions are done with shape keys"""
     bl_idname = "vrm_rigify_helper.remove_unused_bones"
     bl_label = "Remove Unused Bones"
 
