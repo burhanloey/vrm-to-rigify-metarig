@@ -1,7 +1,7 @@
 import bpy
 import mathutils
 
-from .checks import is_metarig
+from ..checks import is_metarig
 
 
 FACIAL_BONES = [

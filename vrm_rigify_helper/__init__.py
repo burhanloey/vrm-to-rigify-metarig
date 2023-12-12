@@ -12,7 +12,7 @@ from .vertex_groups import RenameVRMVertexGroupsToRigify
 from .cleanup import RemoveUnusedBones
 from .wrapper import GenerateVRMMetaRigWrapper
 from .mergers import MergeRigs
-from .correction import AlignFacialBones
+from .corrections.facial import AlignFacialBones
 from .utils import SelectAllRootBones, SelectHairRootBones, SelectSkirtRootBones, SelectCoatSkirtRootBones
 
 
