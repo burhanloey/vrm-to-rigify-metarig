@@ -14,6 +14,7 @@ from .wrapper import GenerateVRMMetaRigWrapper
 from .mergers import MergeRigs
 from .corrections.facial import AlignFacialBones
 from .corrections.head import AlignHeadBone
+from .corrections.hand import AlignHandBones
 from .utils import SelectAllRootBones, SelectHairRootBones, SelectSkirtRootBones, SelectCoatSkirtRootBones
 
 
@@ -41,6 +42,9 @@ class VRMRigifyHelperSidebarPanel(bpy.types.Panel):
         
         row = layout.row()
         row.operator("vrm_rigify_helper.align_head_bone")
+        
+        row = layout.row()
+        row.operator("vrm_rigify_helper.align_hand_bones")
         
         row = layout.row()
         row.operator("vrm_rigify_helper.extract_vrm_extra_bones_as_rigify")
@@ -82,6 +86,7 @@ CLASSES = [
     MergeRigs,
     AlignFacialBones,
     AlignHeadBone,
+    AlignHandBones,
     SelectAllRootBones,
     SelectHairRootBones,
     SelectSkirtRootBones,

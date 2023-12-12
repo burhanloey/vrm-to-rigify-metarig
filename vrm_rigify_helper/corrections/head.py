@@ -23,7 +23,7 @@ def align_head_bone(context):
 
 
 class AlignHeadBone(bpy.types.Operator):
-    """Align head bone vertically. """
+    """Align head bone vertically"""
     bl_idname = "vrm_rigify_helper.align_head_bone"
     bl_label = "Align Head Bone"
 
