@@ -15,7 +15,7 @@ def align_head_bone(context):
     
     head_bone.tail.x = 0.0
     head_bone.tail.y = head_bone.head.y
-    head_bone.length += 0.13
+    head_bone.length = 0.2
     
     bpy.ops.object.mode_set(mode='OBJECT')
     
