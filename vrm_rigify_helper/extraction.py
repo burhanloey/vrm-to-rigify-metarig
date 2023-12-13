@@ -1,7 +1,7 @@
 import bpy
 
 from .checks import is_vrm_rig
-from .utils import select_all_root_bones
+from .utils.selection import select_all_root_bones
 
 
 def extract_vrm_extra_bones(context, vroid_rig, pattern, bone_layer, name_suffix):

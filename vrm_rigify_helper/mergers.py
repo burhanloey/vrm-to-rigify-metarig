@@ -1,6 +1,6 @@
 import bpy
 
-from .utils import select_root_bones
+from .utils.selection import select_root_bones
 
 
 def filter_bones(context, suffix):

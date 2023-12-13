@@ -16,7 +16,7 @@ from .corrections.facial import AlignFacialBones
 from .corrections.head import AlignHeadBone
 from .corrections.hand import AlignHandBones
 from .corrections.feet import AlignFeetBones
-from .utils import SelectAllRootBones, SelectHairRootBones, SelectSkirtRootBones, SelectCoatSkirtRootBones
+from .utils.selection import SelectAllRootBones, SelectHairRootBones, SelectSkirtRootBones, SelectCoatSkirtRootBones
 
 
 class VRMRigifyHelperSidebarPanel(bpy.types.Panel):
