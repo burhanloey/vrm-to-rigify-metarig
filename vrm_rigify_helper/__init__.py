@@ -17,6 +17,7 @@ from .corrections.head import AlignHeadBone
 from .corrections.hand import AlignHandBones
 from .corrections.feet import AlignFeetBones
 from .utils.selection import SelectAllRootBones, SelectHairRootBones, SelectSkirtRootBones, SelectCoatSkirtRootBones
+from .utils.extra_bones import EnableHairFollow, DisableHairFollow, EnableClothFollow, DisableClothFollow
 
 
 class VRMRigifyHelperSidebarPanel(bpy.types.Panel):
@@ -79,6 +80,18 @@ class VRMRigifyHelperSidebarPanel(bpy.types.Panel):
         
         row = layout.row()
         row.operator("vrm_rigify_helper.select_all_root_bones")
+        
+        row = layout.row()
+        row.operator("vrm_rigify_helper.enable_hair_follow")
+        
+        row = layout.row()
+        row.operator("vrm_rigify_helper.disable_hair_follow")
+        
+        row = layout.row()
+        row.operator("vrm_rigify_helper.enable_cloth_follow")
+        
+        row = layout.row()
+        row.operator("vrm_rigify_helper.disable_cloth_follow")
 
 
 CLASSES = [
@@ -96,6 +109,10 @@ CLASSES = [
     SelectHairRootBones,
     SelectSkirtRootBones,
     SelectCoatSkirtRootBones,
+    EnableHairFollow,
+    DisableHairFollow,
+    EnableClothFollow,
+    DisableClothFollow,
     VRMRigifyHelperSidebarPanel
 ]
 
