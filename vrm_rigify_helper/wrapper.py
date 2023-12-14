@@ -7,6 +7,7 @@ class GenerateVRMMetaRigWrapper(bpy.types.Operator):
     """Generate using vrm-rigify plugin"""
     bl_idname = "vrm_rigify_helper.generate_vrm_meta_rig"
     bl_label = "Generate VRM Meta-Rig"
+    bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
     def poll(cls, context):

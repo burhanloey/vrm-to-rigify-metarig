@@ -2,6 +2,7 @@ import bpy
 
 from .checks import is_vrm_rig
 from .utils.selection import select_all_root_bones
+from .common import layer_params
 
 
 def extract_vrm_extra_bones(context, vroid_rig, pattern, bone_layer, name_suffix):
@@ -21,14 +22,14 @@ def extract_vrm_extra_bones(context, vroid_rig, pattern, bone_layer, name_suffix
     bpy.ops.armature.delete()
     bpy.ops.armature.select_all(action='SELECT')
     
+    # Tag the bones in custom properties for later use
     for bone in context.selected_editable_bones:
         bone['extracted_vrm_bone'] = name_suffix
     
     # Move bones to designated bone layer
-    bone_layers_parameter = [False] * 32
-    bone_layers_parameter[bone_layer] = True
-    bpy.ops.armature.bone_layers(layers=bone_layers_parameter)
-    hair_rig.data.layers = bone_layers_parameter  # make the layer visible
+    bone_layer_params = layer_params([bone_layer])
+    bpy.ops.armature.bone_layers(layers=bone_layer_params)
+    hair_rig.data.layers = bone_layer_params  # make the layer visible
     
     bpy.ops.object.mode_set(mode='OBJECT')
     
@@ -55,20 +56,17 @@ def setup_bones_as_rigify_tail(context, armature, tweak_layer):
     
     root_bones = context.selected_pose_bones
     
-    bone_layers_parameter = [False] * 32
-    bone_layers_parameter[tweak_layer] = True
-    
-    for root_bone in root_bones:
-        root_bone.rigify_type = 'spines.basic_tail'
+    for bone in root_bones:
+        bone.rigify_type = 'spines.basic_tail'
         
         # Automation axes, 0 = x-axis, 1 = y-axis, 2 = z-axis
-        root_bone.rigify_parameters.copy_rotation_axes[0] = True
-        root_bone.rigify_parameters.copy_rotation_axes[1] = True
-        root_bone.rigify_parameters.copy_rotation_axes[2] = True
+        bone.rigify_parameters.copy_rotation_axes[0] = True
+        bone.rigify_parameters.copy_rotation_axes[1] = True
+        bone.rigify_parameters.copy_rotation_axes[2] = True
         
         # Assign tweak layers
-        root_bone.rigify_parameters.tweak_layers_extra = True
-        root_bone.rigify_parameters.tweak_layers = bone_layers_parameter
+        bone.rigify_parameters.tweak_layers_extra = True
+        bone.rigify_parameters.tweak_layers = layer_params([tweak_layer])
         
         
 def setup_vrm_hair_bones_as_rigify_tail(context, hair_rig):
@@ -110,14 +108,17 @@ def split_coat_bones_from_skirt_rig(context, skirt_rig):
 def extract_vrm_extra_bones_as_rigify(context):
     vroid_rig = context.view_layer.objects.active
     
+    # Extract hair rig
     hair_rig = extract_vrm_hair(context, vroid_rig)
     setup_vrm_hair_bones_as_rigify_tail(context, hair_rig)
     hair_rig.data['extracted_vrm_rig'] = 'hair'
     
+    # Extract skirt rig
     skirt_rig = extract_vrm_skirt(context, vroid_rig)
     setup_vrm_skirt_bones_as_rigify_tail(context, skirt_rig)
     skirt_rig.data['extracted_vrm_rig'] = 'skirt'
     
+    # Extract coat skirt rig
     coat_rig = split_coat_bones_from_skirt_rig(context, skirt_rig)
     coat_rig.data['extracted_vrm_rig'] = 'coat_skirt'
     
@@ -134,6 +135,7 @@ class ExtractVRMExtraBonesAsRigify(bpy.types.Operator):
     """Extract hair, skirt and coat skirt into separate rigs"""
     bl_idname = "vrm_rigify_helper.extract_vrm_extra_bones_as_rigify"
     bl_label = "Extract VRM Extra Bones as Rigify"
+    bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
     def poll(cls, context):

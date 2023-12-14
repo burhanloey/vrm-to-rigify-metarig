@@ -33,6 +33,7 @@ class AlignFeetBones(bpy.types.Operator):
     """Align feet bones"""
     bl_idname = "vrm_rigify_helper.align_feet_bones"
     bl_label = "Align Feet Bones"
+    bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
     def poll(cls, context):

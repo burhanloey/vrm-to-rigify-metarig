@@ -61,6 +61,7 @@ class UpdateMetarigBoneLayers(bpy.types.Operator):
     """Hair and its tweak at layer 19 and 20. Cloth and its tweak at layer 21 and 22"""
     bl_idname = "vrm_rigify_helper.update_metarig_bone_layers"
     bl_label = "Update Metarig Bone Layers"
+    bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
     def poll(cls, context):

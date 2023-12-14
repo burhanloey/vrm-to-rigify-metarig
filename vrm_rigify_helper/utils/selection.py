@@ -1,5 +1,7 @@
 import bpy
 
+from ..common import bone_select_set
+
 
 def select_all_root_bones(context):
     initial_mode = context.view_layer.objects.active.mode
@@ -12,9 +14,7 @@ def select_all_root_bones(context):
     
     for bone in bones:
         if bone.parent:  # if the bone has parent (it is a child bone)
-            bone.select = False
-            bone.select_head = False
-            bone.select_tail = False
+            bone_select_set(bone, False)
             
     if initial_mode == 'OBJECT':
         bpy.ops.object.mode_set(mode='POSE')
@@ -34,9 +34,7 @@ def select_root_bones(context, tag):
     for bone in bones:
         # If bone has parent (is child) or bone is not tagged
         if bone.parent or bone.get('extracted_vrm_bone') != tag:
-            bone.select = False
-            bone.select_head = False
-            bone.select_tail = False
+            bone_select_set(bone, False)
             
     if initial_mode == 'OBJECT':
         bpy.ops.object.mode_set(mode='EDIT')
@@ -45,6 +43,8 @@ def select_root_bones(context, tag):
 
 
 class BaseSelector(bpy.types.Operator):
+    bl_options = {'REGISTER', 'UNDO'}
+
     @classmethod
     def poll(cls, context):
         obj = context.view_layer.objects.active

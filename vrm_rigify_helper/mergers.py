@@ -1,6 +1,7 @@
 import bpy
 
 from .utils.selection import select_root_bones
+from .common import bone_select_set
 
 
 def filter_bones(context, suffix):
@@ -10,9 +11,7 @@ def filter_bones(context, suffix):
         if bone.name and bone.name[-1] == suffix:
             continue
         
-        bone.select = False
-        bone.select_head = False
-        bone.select_tail = False
+        bone_select_set(bone, False)
 
 
 def parent_selection(context, target_bone_full_name):
@@ -54,6 +53,7 @@ class MergeRigs(bpy.types.Operator):
     """Make sure the metarig is the active object among the selection"""
     bl_idname = "vrm_rigify_helper.merge_rigs"
     bl_label = "Merge Rigs"
+    bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
     def poll(cls, context):

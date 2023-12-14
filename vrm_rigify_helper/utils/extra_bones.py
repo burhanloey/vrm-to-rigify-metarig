@@ -1,11 +1,8 @@
 import bpy
 
 from ..checks import is_rigify_rig
-from ..common import get_current_visible_layers
-
-
-HAIR_LAYER = 19
-CLOTH_LAYER = 21
+from ..common import get_current_visible_layers, layer_params
+from ..layers import HAIR_LAYER, CLOTH_LAYER
     
     
 def set_tail_follow(context, value, layer):
@@ -17,13 +14,12 @@ def set_tail_follow(context, value, layer):
     
     bpy.ops.pose.select_all(action='DESELECT')
     
-    visible_layer_parameters = [False] * 32
-    visible_layer_parameters[layer] = True
-    
-    rig.data.layers = visible_layer_parameters
+    # Only make the selected layer visible
+    rig.data.layers = layer_params([layer])
     
     bpy.ops.pose.select_all(action='SELECT')
     
+    # Make any bone active so Rigify will show their properties in the panel
     if context.selected_pose_bones:
         rig.data.bones.active = context.selected_pose_bones[0].bone
     
@@ -35,6 +31,8 @@ def set_tail_follow(context, value, layer):
 
 
 class BaseSetTailFollow(bpy.types.Operator):
+    bl_options = {'REGISTER', 'UNDO'}
+
     @classmethod
     def poll(cls, context):
         obj = context.view_layer.objects.active

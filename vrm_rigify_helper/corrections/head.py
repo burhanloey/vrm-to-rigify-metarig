@@ -26,6 +26,7 @@ class AlignHeadBone(bpy.types.Operator):
     """Align head bone vertically"""
     bl_idname = "vrm_rigify_helper.align_head_bone"
     bl_label = "Align Head Bone"
+    bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
     def poll(cls, context):

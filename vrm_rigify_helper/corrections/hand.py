@@ -2,6 +2,7 @@ import bpy
 
 from math import radians
 from ..checks import is_metarig
+from ..common import bone_select_set
 
 
 def set_bone_rolls(rig, bone_names, roll_in_degree):
@@ -20,15 +21,11 @@ def set_bone_length(rig, bone_name, new_length):
 
 
 def select_bone(bone):
-    bone.select = True
-    bone.select_head = True
-    bone.select_tail = True
+    bone_select_set(bone, True)
     
     
 def deselect_bone(bone):
-    bone.select = False
-    bone.select_head = False
-    bone.select_tail = False
+    bone_select_set(bone, False)
 
 
 def set_bend_rotation_axis(rig, main_bone_names, side, axis):
@@ -91,6 +88,7 @@ class AlignHandBones(bpy.types.Operator):
     """Align hand bone to cover the whole palm. Fix the arm bone rolls. Bend the fingers towards proper direction"""
     bl_idname = "vrm_rigify_helper.align_hand_bones"
     bl_label = "Align Hand Bones"
+    bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
     def poll(cls, context):

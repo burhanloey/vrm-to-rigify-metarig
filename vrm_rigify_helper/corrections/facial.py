@@ -2,6 +2,7 @@ import bpy
 import mathutils
 
 from ..checks import is_metarig
+from ..common import bone_select_set
 
 
 FACIAL_BONES = [
@@ -102,9 +103,7 @@ def select_bone(rig, bone_name):
     bone = rig.data.edit_bones.get(bone_name)
 
     if bone:
-        bone.select = True
-        bone.select_head = True
-        bone.select_tail = True
+        bone_select_set(bone, True)
 
 
 def align_facial_bones(context):
@@ -146,6 +145,7 @@ class AlignFacialBones(bpy.types.Operator):
     """Align facial bones to the eye bones. Does not align to mesh. This is required to generate Rigify rig using upgraded face rig"""
     bl_idname = "vrm_rigify_helper.align_facial_bones"
     bl_label = "Align Facial Bones"
+    bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
     def poll(cls, context):
