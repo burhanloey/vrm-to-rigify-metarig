@@ -1,7 +1,22 @@
 import bpy
 
-from .checks import is_metarig
+from .checks import is_metarig, is_rigify_rig
+from .common import layer_params
 
+
+FACE_LAYER = 0
+TORSO_LAYER = 3
+FINGERS_LAYER = 5
+
+ARM_L_IK_LAYER = 7
+ARM_L_FK_LAYER = 8
+ARM_R_IK_LAYER = 10
+ARM_R_FK_LAYER = 11
+
+LEG_L_IK_LAYER = 13
+LEG_R_IK_LAYER = 16
+
+ROOT_LAYER = 28
 
 HAIR_LAYER = 19
 HAIR_TWEAK_LAYER = 20
@@ -23,6 +38,19 @@ HAIR_UI_TEXT = 'Hair'
 HAIR_TWEAK_UI_TEXT = 'Hair (Tweak)'
 CLOTH_UI_TEXT = 'Cloth'
 CLOTH_TWEAK_UI_TEXT = 'Cloth (Tweak)'
+
+DEFAULT_VISIBLE_LAYERS = [
+    FACE_LAYER,
+    TORSO_LAYER,
+    FINGERS_LAYER,
+    ARM_L_IK_LAYER,
+    ARM_L_FK_LAYER,
+    ARM_R_IK_LAYER,
+    ARM_R_FK_LAYER,
+    LEG_L_IK_LAYER,
+    LEG_R_IK_LAYER,
+    ROOT_LAYER
+]
 
 
 def update_metarig_bone_layers(context):
@@ -70,4 +98,21 @@ class UpdateMetarigBoneLayers(bpy.types.Operator):
 
     def execute(self, context):
         update_metarig_bone_layers(context)
+        return {'FINISHED'}
+        
+        
+class ShowDefaultVisibleLayers(bpy.types.Operator):
+    """Show default visible layers"""
+    bl_idname = "vrm_rigify_helper.show_default_visible_layers"
+    bl_label = "Show Default Visible Layers"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        obj = context.view_layer.objects.active
+        return is_rigify_rig(obj)
+
+    def execute(self, context):
+        rig = context.view_layer.objects.active
+        rig.data.layers = layer_params(DEFAULT_VISIBLE_LAYERS)
         return {'FINISHED'}

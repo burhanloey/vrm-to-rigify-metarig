@@ -32,8 +32,9 @@ def select_root_bones(context, tag):
     bones = context.selected_editable_bones
     
     for bone in bones:
-        # If bone has parent (is child) or bone is not tagged
-        if bone.parent or bone.get('extracted_vrm_bone') != tag:
+        # If bone has parent and parent's tag is the same (is tail) => deselect
+        # bone is not tagged  => deselect
+        if (bone.parent and bone.parent.get('extracted_vrm_bone') == tag) or (bone.get('extracted_vrm_bone') != tag):
             bone_select_set(bone, False)
             
     if initial_mode == 'OBJECT':
