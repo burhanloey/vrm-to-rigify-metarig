@@ -52,6 +52,13 @@ DEFAULT_VISIBLE_LAYERS = [
     ROOT_LAYER
 ]
 
+IK_LAYERS = [
+    ARM_L_IK_LAYER,
+    ARM_R_IK_LAYER,
+    LEG_L_IK_LAYER,
+    LEG_R_IK_LAYER
+]
+
 
 def update_metarig_bone_layers(context):
     metarig = context.view_layer.objects.active
