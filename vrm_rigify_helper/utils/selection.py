@@ -50,7 +50,7 @@ class BaseSelector(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         obj = context.view_layer.objects.active
-        return not is_rigify_rig(obj)
+        return (obj and obj.data and obj.type == 'ARMATURE' and 'rig_id' not in obj.data)
 
 
 class SelectAllRootBones(BaseSelector):
