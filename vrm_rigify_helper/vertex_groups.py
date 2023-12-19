@@ -75,7 +75,7 @@ def rename_vrm_vertex_groups_to_rigify(context):
 class RenameVRMVertexGroupsToRigify(bpy.types.Operator):
     """Warning! Destructive operation. Consider making duplicates of the meshes or re-import if you want the original vertex group names"""
     bl_idname = "vrm_rigify_helper.rename_vrm_vertex_groups_to_rigify"
-    bl_label = "Rename VRM Vertex Groups to Rigify"
+    bl_label = "Rename VRM Vertex Groups"
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod

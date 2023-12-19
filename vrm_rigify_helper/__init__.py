@@ -21,18 +21,33 @@ from .utils.extra_bones import EnableHairFollow, DisableHairFollow, EnableClothF
 from .utils.eye_fix import FixEyeDirection
 
 
-class VRMRigifyHelperSidebarPanel(bpy.types.Panel):
+class VRMRigifyHelperMainPanel(bpy.types.Panel):
     """Utility operations to help with VRM Rigify addon"""
     bl_label = "VRM Rigify Helper"
-    bl_idname = "VRM_RIGIFY_HELPER_PT_sidebar_panel"
+    bl_idname = "VRM_RIGIFY_HELPER_PT_main_panel"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = "VRM Rigify Helper"
 
     def draw(self, context):
         layout = self.layout
+        
+        row = layout.row()
+        row.scale_y = 2.0
+        row.operator("render.render", text="One-Click Setup", icon="OUTLINER_OB_ARMATURE")
 
-        obj = context.object
+
+class VRMRigifyHelperOperatorsPanel(bpy.types.Panel):
+    """"""
+    bl_label = "Operators"
+    bl_idname = "VRM_RIGIFY_HELPER_PT_operators_panel"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "VRM Rigify Helper"
+    bl_options = {'DEFAULT_CLOSED'}
+    
+    def draw(self, context):
+        layout = self.layout
         
         row = layout.row()
         row.operator("vrm_rigify_helper.generate_vrm_meta_rig")
@@ -41,67 +56,79 @@ class VRMRigifyHelperSidebarPanel(bpy.types.Panel):
         row.operator("vrm_rigify_helper.update_metarig_bone_layers")
         
         row = layout.row()
-        row.operator("vrm_rigify_helper.align_facial_bones")
+        row.label(text="Bone alignment:")
         
         row = layout.row()
-        row.operator("vrm_rigify_helper.align_head_bone")
+        row.operator("vrm_rigify_helper.align_facial_bones", text="Facial")
+        row.operator("vrm_rigify_helper.align_head_bone", text="Head")
         
         row = layout.row()
-        row.operator("vrm_rigify_helper.align_hand_bones")
+        row.operator("vrm_rigify_helper.align_hand_bones", text="Hand")
+        row.operator("vrm_rigify_helper.align_feet_bones", text="Feet")
         
-        row = layout.row()
-        row.operator("vrm_rigify_helper.align_feet_bones")
+        row = layout.separator()
         
         row = layout.row()
         row.operator("vrm_rigify_helper.extract_vrm_extra_bones_as_rigify")
         
         row = layout.row()
         row.operator("vrm_rigify_helper.merge_rigs")
+        
+        row = layout.separator()
 
         row = layout.row()
         row.operator("vrm_rigify_helper.rename_vrm_vertex_groups_to_rigify")
         
-        row = layout.row()
-        row.label(text="After generating Rigify rig:")
+        row = layout.separator()
         
         row = layout.row()
         row.operator("vrm_rigify_helper.remove_unused_bones")
         
         row = layout.row()
-        row.label(text="Utilities:")
+        row.operator("vrm_rigify_helper.fix_eye_direction")
+        
+        
+class VRMRigifyHelperUtilitiesPanel(bpy.types.Panel):
+    """"""
+    bl_label = "Utilities"
+    bl_idname = "VRM_RIGIFY_HELPER_PT_utilities_panel"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "VRM Rigify Helper"
+    bl_options = {'DEFAULT_CLOSED'}
+    
+    def draw(self, context):
+        layout = self.layout
         
         row = layout.row()
         row.operator("vrm_rigify_helper.select_hair_root_bones")
-        
         row = layout.row()
         row.operator("vrm_rigify_helper.select_skirt_root_bones")
-        
         row = layout.row()
         row.operator("vrm_rigify_helper.select_coat_skirt_root_bones")
         
-        row = layout.row()
-        row.operator("vrm_rigify_helper.select_all_root_bones")
+        row = layout.separator()
         
         row = layout.row()
         row.operator("vrm_rigify_helper.enable_hair_follow")
-        
         row = layout.row()
         row.operator("vrm_rigify_helper.disable_hair_follow")
         
+        row = layout.separator()
+        
         row = layout.row()
         row.operator("vrm_rigify_helper.enable_cloth_follow")
-        
         row = layout.row()
         row.operator("vrm_rigify_helper.disable_cloth_follow")
         
+        row = layout.separator()
+        
         row = layout.row()
         row.operator("vrm_rigify_helper.enable_all_ik_stretch")
-        
         row = layout.row()
         row.operator("vrm_rigify_helper.disable_all_ik_stretch")
         
-        row = layout.row()
-        row.operator("vrm_rigify_helper.fix_eye_direction")
+        row = layout.separator()
         
         row = layout.row()
         row.operator("vrm_rigify_helper.show_default_visible_layers")
@@ -130,7 +157,9 @@ CLASSES = [
     EnableAllIKStretch,
     DisableAllIKStretch,
     FixEyeDirection,
-    VRMRigifyHelperSidebarPanel
+    VRMRigifyHelperMainPanel,
+    VRMRigifyHelperOperatorsPanel,
+    VRMRigifyHelperUtilitiesPanel
 ]
 
 

@@ -134,7 +134,7 @@ def extract_vrm_extra_bones_as_rigify(context):
 class ExtractVRMExtraBonesAsRigify(bpy.types.Operator):
     """Extract hair, skirt and coat skirt into separate rigs"""
     bl_idname = "vrm_rigify_helper.extract_vrm_extra_bones_as_rigify"
-    bl_label = "Extract VRM Extra Bones as Rigify"
+    bl_label = "Extract VRM Extra Bones"
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
