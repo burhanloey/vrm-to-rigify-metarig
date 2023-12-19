@@ -1,6 +1,7 @@
 import bpy
 
 from ..common import bone_select_set
+from ..checks import is_rigify_rig
 
 
 def select_all_root_bones(context):
@@ -49,7 +50,7 @@ class BaseSelector(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         obj = context.view_layer.objects.active
-        return (obj and obj.data and obj.type == 'ARMATURE')
+        return not is_rigify_rig(obj)
 
 
 class SelectAllRootBones(BaseSelector):
