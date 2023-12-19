@@ -18,6 +18,7 @@ from .corrections.hand import AlignHandBones
 from .corrections.feet import AlignFeetBones
 from .utils.selection import SelectAllRootBones, SelectHairRootBones, SelectSkirtRootBones, SelectCoatSkirtRootBones
 from .utils.extra_bones import EnableHairFollow, DisableHairFollow, EnableClothFollow, DisableClothFollow, EnableAllIKStretch, DisableAllIKStretch
+from .utils.eye_fix import FixEyeDirection
 
 
 class VRMRigifyHelperSidebarPanel(bpy.types.Panel):
@@ -100,6 +101,9 @@ class VRMRigifyHelperSidebarPanel(bpy.types.Panel):
         row.operator("vrm_rigify_helper.disable_all_ik_stretch")
         
         row = layout.row()
+        row.operator("vrm_rigify_helper.fix_eye_direction")
+        
+        row = layout.row()
         row.operator("vrm_rigify_helper.show_default_visible_layers")
 
 
@@ -125,6 +129,7 @@ CLASSES = [
     DisableClothFollow,
     EnableAllIKStretch,
     DisableAllIKStretch,
+    FixEyeDirection,
     VRMRigifyHelperSidebarPanel
 ]
 
