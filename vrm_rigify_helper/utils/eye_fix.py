@@ -1,12 +1,12 @@
 import bpy
 import mathutils
 
-from ..checks import is_rigify_rig
+from ..checks import is_rigify_rig, is_face_mesh
 
 
 def find_face_mesh_object(objs):
     for obj in objs:
-        if 'face' in obj.name.casefold() and obj.type == 'MESH':
+        if is_face_mesh(obj):
             return obj
     return None
 

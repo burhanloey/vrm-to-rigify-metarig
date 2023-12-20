@@ -19,6 +19,7 @@ from .corrections.feet import AlignFeetBones
 from .utils.selection import SelectAllRootBones, SelectHairRootBones, SelectSkirtRootBones, SelectCoatSkirtRootBones
 from .utils.extra_bones import EnableHairFollow, DisableHairFollow, EnableClothFollow, DisableClothFollow, EnableAllIKStretch, DisableAllIKStretch
 from .utils.eye_fix import FixEyeDirection
+from .main import OneClickSetup
 
 
 class VRMRigifyHelperMainPanel(bpy.types.Panel):
@@ -34,7 +35,7 @@ class VRMRigifyHelperMainPanel(bpy.types.Panel):
         
         row = layout.row()
         row.scale_y = 2.0
-        row.operator("render.render", text="One-Click Setup", icon="OUTLINER_OB_ARMATURE")
+        row.operator("vrm_rigify_helper.one_click_setup", text="One-Click Setup", icon="OUTLINER_OB_ARMATURE")
 
 
 class VRMRigifyHelperOperatorsPanel(bpy.types.Panel):
@@ -159,7 +160,8 @@ CLASSES = [
     FixEyeDirection,
     VRMRigifyHelperMainPanel,
     VRMRigifyHelperOperatorsPanel,
-    VRMRigifyHelperUtilitiesPanel
+    VRMRigifyHelperUtilitiesPanel,
+    OneClickSetup
 ]
 
 

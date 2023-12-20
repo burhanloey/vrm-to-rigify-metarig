@@ -28,3 +28,7 @@ def is_metarig(obj):
         if b.rigify_type != "":
             return True
     return False
+
+
+def is_face_mesh(obj):
+    return obj.name and 'face' in obj.name.casefold() and obj.type == 'MESH'
