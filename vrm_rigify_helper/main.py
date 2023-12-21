@@ -128,7 +128,25 @@ def generate(context):
     
     
 def regenerate(context):
-    return
+    metarig = context.view_layer.objects.active
+    
+    bpy.ops.object.duplicate()
+    
+    duplicate_metarig = context.view_layer.objects.active
+    
+    bpy.ops.pose.rigify_upgrade_face()
+    bpy.ops.pose.rigify_generate()
+    
+    rigify_rig = context.view_layer.objects.active
+    rigify_rig.show_in_front = True
+    
+    # Cleanup duplicate metarig
+    deselect_all_objects()
+    set_active(context, duplicate_metarig)
+    
+    bpy.ops.object.delete(use_global=True, confirm=False)
+    
+    post_generate_setup(context, rigify_rig)
 
 
 class OneClickSetup(bpy.types.Operator):

@@ -19,7 +19,13 @@ from .corrections.feet import AlignFeetBones
 from .utils.selection import SelectAllRootBones, SelectHairRootBones, SelectSkirtRootBones, SelectCoatSkirtRootBones
 from .utils.extra_bones import EnableHairFollow, DisableHairFollow, EnableClothFollow, DisableClothFollow, EnableAllIKStretch, DisableAllIKStretch
 from .utils.eye_fix import FixEyeDirection
-from .main import OneClickSetup
+from .main import OneClickSetup, Regenerate
+
+from .checks import is_vrm_rig, is_metarig, is_rigify_rig
+
+
+def has_target_rig(obj):
+    return bool(obj.data.rigify_target_rig)
 
 
 class VRMRigifyHelperMainPanel(bpy.types.Panel):
@@ -35,7 +41,13 @@ class VRMRigifyHelperMainPanel(bpy.types.Panel):
         
         row = layout.row()
         row.scale_y = 2.0
-        row.operator("vrm_rigify_helper.one_click_setup", text="One-Click Setup", icon="OUTLINER_OB_ARMATURE")
+        
+        obj = context.view_layer.objects.active
+        
+        if is_metarig(obj) and has_target_rig(obj):
+            row.operator("vrm_rigify_helper.regenerate", icon="OUTLINER_OB_ARMATURE")
+        else:
+            row.operator("vrm_rigify_helper.one_click_setup", icon="OUTLINER_OB_ARMATURE")
 
 
 class VRMRigifyHelperOperatorsPanel(bpy.types.Panel):
@@ -161,7 +173,8 @@ CLASSES = [
     VRMRigifyHelperMainPanel,
     VRMRigifyHelperOperatorsPanel,
     VRMRigifyHelperUtilitiesPanel,
-    OneClickSetup
+    OneClickSetup,
+    Regenerate
 ]
 
 
