@@ -147,6 +147,13 @@ def regenerate(context):
     bpy.ops.object.delete(use_global=True, confirm=False)
     
     post_generate_setup(context, rigify_rig)
+    
+
+def has_children_that_is_not_collider(obj):
+    for child in obj.children:
+        if 'collider' not in child.name.casefold():
+            return True
+    return False
 
 
 class OneClickSetup(bpy.types.Operator):
@@ -158,7 +165,7 @@ class OneClickSetup(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         obj = context.view_layer.objects.active
-        return is_vrm_rig(obj)
+        return is_vrm_rig(obj) and has_children_that_is_not_collider(obj)
 
     def execute(self, context):
         generate(context)
