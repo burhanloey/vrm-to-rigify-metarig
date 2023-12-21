@@ -4,8 +4,12 @@ from .checks import is_vrm_rig, is_metarig, is_face_mesh
 from .utils.eye_fix import find_face_mesh_object
 
 
-def deselect_all():
+def deselect_all_objects():
     bpy.ops.object.select_all(action='DESELECT')
+    
+    
+def deselect_all_pose_bones():
+    bpy.ops.pose.select_all(action='DESELECT')
     
     
 def set_active(context, obj):
@@ -27,7 +31,7 @@ def copy_rigify_settings(source, destination):
 
 
 def transfer_meshes(context, source, destination):
-    deselect_all()
+    deselect_all_objects()
     set_active(context, source)
     bpy.ops.object.select_hierarchy(direction='CHILD', extend=False)
     
@@ -36,7 +40,7 @@ def transfer_meshes(context, source, destination):
 
 
 def update_meshes_armature_modifiers(context, rig):
-    deselect_all()
+    deselect_all_objects()
     set_active(context, rig)
     bpy.ops.object.select_hierarchy(direction='CHILD', extend=False)
     
@@ -45,7 +49,7 @@ def update_meshes_armature_modifiers(context, rig):
 
 
 def post_generate_setup(context, rigify_rig):
-    deselect_all()
+    deselect_all_objects()
     set_active(context, rigify_rig)
     
     bpy.ops.vrm_rigify_helper.remove_unused_bones()
@@ -54,7 +58,7 @@ def post_generate_setup(context, rigify_rig):
     
     face_mesh = find_face_mesh_object(context.selected_objects)
     
-    deselect_all()
+    deselect_all_objects()
     set_active(context, rigify_rig)
     face_mesh.select_set(True)
     
@@ -62,13 +66,13 @@ def post_generate_setup(context, rigify_rig):
     bpy.ops.vrm_rigify_helper.enable_cloth_follow()
     bpy.ops.vrm_rigify_helper.disable_all_ik_stretch()
     
-    bpy.ops.pose.select_all(action='DESELECT')
+    deselect_all_pose_bones()
     
     bpy.ops.vrm_rigify_helper.show_default_visible_layers()
     
     bpy.ops.object.mode_set(mode='OBJECT')
     
-    deselect_all()
+    deselect_all_objects()
     set_active(context, rigify_rig)
 
 
@@ -83,14 +87,13 @@ def generate(context):
     
     do_bone_alignments()
     
-    deselect_all()
+    deselect_all_objects()
     set_active(context, vrm_rig)
     
     bpy.ops.vrm_rigify_helper.extract_vrm_extra_bones_as_rigify()
     
-    # Select active metarig for the extra bones rigs to merge into
+    # Select and make active the metarig for the extra bones rigs to merge into
     set_active(context, metarig)
-    
     bpy.ops.vrm_rigify_helper.merge_rigs()
     
     # Set Rig Name if it is not specified in Rigify settings
@@ -116,7 +119,7 @@ def generate(context):
     bpy.ops.vrm_rigify_helper.rename_vrm_vertex_groups_to_rigify()
     
     # Cleanup duplicate metarig
-    deselect_all()
+    deselect_all_objects()
     set_active(context, duplicate_metarig)
     
     bpy.ops.object.delete(use_global=True, confirm=False)
