@@ -7,7 +7,7 @@ bl_info = {
 import bpy
 
 from .extraction import ExtractVRMExtraBonesAsRigify
-from .layers import UpdateMetarigBoneLayers, ShowDefaultVisibleLayers
+from .layers import UpdateMetarigBoneLayers, ShowDefaultVisibleLayers, ShowAllControlLayers
 from .vertex_groups import RenameVRMVertexGroupsToRigify
 from .cleanup import RemoveUnusedBones
 from .wrapper import GenerateVRMMetaRigWrapper
@@ -145,12 +145,16 @@ class VRMRigifyHelperUtilitiesPanel(bpy.types.Panel):
         
         row = layout.row()
         row.operator("vrm_rigify_helper.show_default_visible_layers")
+        
+        row = layout.row()
+        row.operator("vrm_rigify_helper.show_all_control_layers")
 
 
 CLASSES = [
     ExtractVRMExtraBonesAsRigify,
     UpdateMetarigBoneLayers,
     ShowDefaultVisibleLayers,
+    ShowAllControlLayers,
     RenameVRMVertexGroupsToRigify,
     RemoveUnusedBones,
     GenerateVRMMetaRigWrapper,
