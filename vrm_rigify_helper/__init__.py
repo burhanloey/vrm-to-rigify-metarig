@@ -1,6 +1,12 @@
 bl_info = {
     "name": "VRM Rigify Helper",
+    "author": "burhanloey",
+    "description": "Helper addon for vrm-rigify",
+    "version": (0, 1, 1),
     "blender": (2, 80, 0),
+    "location": "3D Viewport > VRM Rigify Helper Panel",
+    "doc_url": "https://github.com/burhanloey/vrm-rigify-helper",
+    "tracker_url": "https://github.com/burhanloey/vrm-rigify-helper/issues",
     "category": "Rigging",
 }
 
