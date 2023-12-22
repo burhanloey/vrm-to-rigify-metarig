@@ -13,11 +13,16 @@ def extract_vrm_extra_bones(context, vroid_rig, pattern, bone_layer, name_suffix
     
     bpy.ops.object.duplicate()
     
-    hair_rig = context.view_layer.objects.active
-    
-    # Delete other bones that are not selected by pattern
     bpy.ops.object.mode_set(mode='EDIT')
     bpy.ops.object.select_pattern(pattern=pattern, extend=False)
+    
+    # Delete the duplicated armature if no bones found and return None
+    if not context.selected_editable_bones:
+        bpy.ops.object.mode_set(mode='OBJECT')
+        bpy.ops.object.delete(use_global=True, confirm=False)
+        return None
+    
+    # Delete other bones that are not selected by pattern
     bpy.ops.armature.select_all(action='INVERT')
     bpy.ops.armature.delete()
     bpy.ops.armature.select_all(action='SELECT')
@@ -29,14 +34,14 @@ def extract_vrm_extra_bones(context, vroid_rig, pattern, bone_layer, name_suffix
     # Move bones to designated bone layer
     bone_layer_params = layer_params([bone_layer])
     bpy.ops.armature.bone_layers(layers=bone_layer_params)
-    hair_rig.data.layers = bone_layer_params  # make the layer visible
+    
+    extracted_armature = context.view_layer.objects.active
+    extracted_armature.data.layers = bone_layer_params  # make the layer visible
+    extracted_armature.name = vroid_rig.name + '.' + name_suffix
     
     bpy.ops.object.mode_set(mode='OBJECT')
     
-    new_armature = context.view_layer.objects.active
-    new_armature.name = vroid_rig.name + '.' + name_suffix
-    
-    return new_armature
+    return extracted_armature
     
     
 def extract_vrm_hair(context, vroid_rig):
@@ -99,36 +104,46 @@ def split_coat_bones_from_skirt_rig(context, skirt_rig):
     
     context.view_layer.objects.active.select_set(False)
     
-    coat_rig = context.view_layer.objects.selected[0]
-    coat_rig.name = skirt_rig.name + '.coat'
+    selected_objects = context.view_layer.objects.selected
     
-    return coat_rig
+    if selected_objects:
+        coat_rig = selected_objects[0]
+        coat_rig.name = skirt_rig.name + '.coat'
+        return coat_rig
+    else:
+        return None
 
 
 def extract_vrm_extra_bones_as_rigify(context):
     vroid_rig = context.view_layer.objects.active
+    extracted_rigs = []
     
     # Extract hair rig
     hair_rig = extract_vrm_hair(context, vroid_rig)
-    setup_vrm_hair_bones_as_rigify_tail(context, hair_rig)
-    hair_rig.data['extracted_vrm_rig'] = 'hair'
+    if hair_rig:
+        setup_vrm_hair_bones_as_rigify_tail(context, hair_rig)
+        hair_rig.data['extracted_vrm_rig'] = 'hair'
+        extracted_rigs.append(hair_rig)
     
     # Extract skirt rig
     skirt_rig = extract_vrm_skirt(context, vroid_rig)
-    setup_vrm_skirt_bones_as_rigify_tail(context, skirt_rig)
-    skirt_rig.data['extracted_vrm_rig'] = 'skirt'
+    if skirt_rig:
+        setup_vrm_skirt_bones_as_rigify_tail(context, skirt_rig)
+        skirt_rig.data['extracted_vrm_rig'] = 'skirt'
+        extracted_rigs.append(skirt_rig)
     
-    # Extract coat skirt rig
-    coat_rig = split_coat_bones_from_skirt_rig(context, skirt_rig)
-    coat_rig.data['extracted_vrm_rig'] = 'coat_skirt'
+        # Extract coat skirt rig from skirt rig
+        coat_rig = split_coat_bones_from_skirt_rig(context, skirt_rig)
+        if coat_rig:
+            coat_rig.data['extracted_vrm_rig'] = 'coat_skirt'
+            extracted_rigs.append(coat_rig)
     
     bpy.ops.object.select_all(action='DESELECT')
     
-    hair_rig.select_set(True)
-    skirt_rig.select_set(True)
-    coat_rig.select_set(True)
-    
-    context.view_layer.objects.active = hair_rig
+    if extracted_rigs:
+        for rig in extracted_rigs:
+            rig.select_set(True)
+        context.view_layer.objects.active = extracted_rigs[0]
     
     
 class ExtractVRMExtraBonesAsRigify(bpy.types.Operator):
