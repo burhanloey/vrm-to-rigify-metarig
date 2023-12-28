@@ -25,6 +25,7 @@ from .corrections.feet import AlignFeetBones
 from .utils.selection import SelectAllRootBones, SelectHairRootBones, SelectSkirtRootBones, SelectCoatSkirtRootBones
 from .utils.extra_bones import EnableHairFollow, DisableHairFollow, EnableClothFollow, DisableClothFollow, EnableAllIKStretch, DisableAllIKStretch
 from .utils.eye_fix import FixEyeDirection
+from .metarig import GenerateMetarig
 from .main import OneClickSetup, Regenerate
 
 from .checks import is_vrm_rig, is_metarig, is_rigify_rig
@@ -69,7 +70,8 @@ class VRMRigifyHelperOperatorsPanel(bpy.types.Panel):
         layout = self.layout
         
         row = layout.row()
-        row.operator("vrm_rigify_helper.generate_vrm_meta_rig")
+        #row.operator("vrm_rigify_helper.generate_vrm_meta_rig")
+        row.operator("vrm_rigify_helper.generate_metarig")
         
         row = layout.row()
         row.operator("vrm_rigify_helper.update_metarig_bone_layers")
@@ -183,6 +185,7 @@ CLASSES = [
     VRMRigifyHelperMainPanel,
     VRMRigifyHelperOperatorsPanel,
     VRMRigifyHelperUtilitiesPanel,
+    GenerateMetarig,
     OneClickSetup,
     Regenerate
 ]
