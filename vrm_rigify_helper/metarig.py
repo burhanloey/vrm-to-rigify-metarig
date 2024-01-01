@@ -91,6 +91,18 @@ def find_bust_bone_names(metarig):
     return bust_bone_names
 
 
+def find_extra_bone_names(metarig):
+    extra_bone_names = []
+    
+    bone_groups = metarig.data.vrm_addon_extension.vrm0.secondary_animation.bone_groups
+    
+    for bone_group in bone_groups:
+        for bone in bone_group.bones:
+            extra_bone_names.append(bone.bone_name)
+    
+    return extra_bone_names
+
+
 def rename_bones(metarig):
     bpy.ops.object.mode_set(mode='EDIT')
     
@@ -256,6 +268,62 @@ def rigify_leg(metarig, bone_name, layers, fk_layers, tweak_layers):
     change_bone_layers(metarig, bone_name, layers)
 
 
+def rigify_finger(metarig, bone_name, layers, tweak_layers):
+    pose_bone = metarig.pose.bones[bone_name]
+    pose_bone.rigify_type = 'limbs.super_finger'
+    
+    force_rigify_options_update(metarig)
+    
+    params = pose_bone.rigify_parameters
+    params.primary_rotation_axis = 'automatic'
+    params.bbones = 10
+    params.make_extra_ik_control = False
+    params.tweak_layers_extra = True
+    params.tweak_layers = layer_params(tweak_layers)
+    
+    change_bone_layers(metarig, bone_name, layers)
+
+
+def rigify_fingers(metarig, layers, tweak_layers):
+    finger_bone_names = [
+        "thumb.01.L",
+        "thumb.02.L",
+        "thumb.03.L",
+        "f_index.01.L",
+        "f_index.02.L",
+        "f_index.03.L",
+        "f_middle.01.L",
+        "f_middle.02.L",
+        "f_middle.03.L",
+        "f_ring.01.L",
+        "f_ring.02.L",
+        "f_ring.03.L",
+        "f_pinky.01.L",
+        "f_pinky.02.L",
+        "f_pinky.03.L",
+        "thumb.01.R",
+        "thumb.02.R",
+        "thumb.03.R",
+        "f_index.01.R",
+        "f_index.02.R",
+        "f_index.03.R",
+        "f_middle.01.R",
+        "f_middle.02.R",
+        "f_middle.03.R",
+        "f_ring.01.R",
+        "f_ring.02.R",
+        "f_ring.03.R",
+        "f_pinky.01.R",
+        "f_pinky.02.R",
+        "f_pinky.03.R",
+    ]
+    
+    base_finger_bone_names = filter(lambda bone: '01' in bone, finger_bone_names)
+    
+    for bone_name in base_finger_bone_names:
+        rigify_finger(metarig, bone_name, layers, tweak_layers)
+
+
 def rigify_bust(metarig, bone_name, layers):
     pose_bone = metarig.pose.bones[bone_name]
     pose_bone.rigify_type = 'basic.super_copy'
@@ -272,9 +340,17 @@ def rigify_bust(metarig, bone_name, layers):
     change_bone_layers(metarig, bone_name, layers)
 
 
-def rigify_extra_bones(metarig):
-    #TODO
-    return
+def rigify_extra_bone(metarig, bone_name, layers):
+    pose_bone = metarig.pose.bones[bone_name]
+    pose_bone.rigify_type = 'basic.copy_chain'
+    
+    force_rigify_options_update(metarig)
+    
+    params = pose_bone.rigify_parameters
+    params.make_controls = True
+    params.make_deforms = True
+    
+    change_bone_layers(metarig, bone_name, layers)
 
 
 def set_layer_settings(metarig, layer_number, name, row, group):
@@ -288,7 +364,7 @@ def init_rigify_layers(metarig):
     bpy.ops.armature.rigify_add_bone_groups()
     bpy.ops.pose.rigify_layer_init()
     
-    metarig.data.layers = layer_params([0, 3, 5, 7, 10, 13, 16])
+    metarig.data.layers = layer_params([0, 3, 5, 7, 10, 13, 16, 19])
     
     # Refer default human meta-rig
     set_layer_settings(metarig, 0, 'Face', 1, 5)
@@ -317,6 +393,8 @@ def init_rigify_layers(metarig):
     set_layer_settings(metarig, 17, 'Leg.R (FK)', 11, 5)
     set_layer_settings(metarig, 18, 'Leg.R (Tweak)', 12, 4)
     
+    set_layer_settings(metarig, 19, 'Extras', 19, 6)
+    
     # Root
     metarig.data.rigify_layers[28].group = 1
 
@@ -332,11 +410,14 @@ def setup_rigify(metarig):
     rigify_spine(metarig, 'spine', layers=[3])
     rigify_leg(metarig, 'thigh.L', layers=[13], fk_layers=[14], tweak_layers=[15])
     rigify_leg(metarig, 'thigh.R', layers=[16], fk_layers=[17], tweak_layers=[18])
+    rigify_fingers(metarig, layers=[5], tweak_layers=[6])
     
-    for name in find_bust_bone_names(metarig):
-        rigify_bust(metarig, name, layers=[3])
+    #for name in find_bust_bone_names(metarig):
+    #    rigify_bust(metarig, name, layers=[3])
+        
+    for name in find_extra_bone_names(metarig):
+        rigify_extra_bone(metarig, name, layers=[19])
     
-    rigify_extra_bones(metarig)
     init_rigify_layers(metarig)
 
 
