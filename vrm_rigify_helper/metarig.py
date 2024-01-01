@@ -76,21 +76,6 @@ BONE_MAPPING = {
 UNNEEDED_BONES = ["Root"]
 
 
-def find_bust_bone_names(metarig):
-    bust_bone_names = []
-    
-    bone_groups = metarig.data.vrm_addon_extension.vrm0.secondary_animation.bone_groups
-    
-    for bone_group in bone_groups:
-        if bone_group.comment != 'Bust':
-            continue
-        for bone in bone_group.bones:
-            bust_bone_names.append(bone.bone_name)
-        break  # there should be only one bust bone group, so short circuit the loop
-    
-    return bust_bone_names
-
-
 def find_extra_bone_names(metarig):
     extra_bone_names = []
     
@@ -413,9 +398,6 @@ def setup_rigify(metarig):
     rigify_leg(metarig, 'thigh.L', layers=[13], fk_layers=[14], tweak_layers=[15])
     rigify_leg(metarig, 'thigh.R', layers=[16], fk_layers=[17], tweak_layers=[18])
     rigify_fingers(metarig, layers=[5], tweak_layers=[6])
-    
-    #for name in find_bust_bone_names(metarig):
-    #    rigify_bust(metarig, name, layers=[3])
         
     for name in find_extra_bone_names(metarig):
         rigify_extra_bone(metarig, name, layers=[19])
