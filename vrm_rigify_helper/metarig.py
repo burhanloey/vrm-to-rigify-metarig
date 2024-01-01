@@ -115,9 +115,11 @@ def rename_bones(metarig):
         if bone_spec not in BONE_MAPPING:
             continue
         
-        bone = metarig.data.bones.get(bone_name)
+        bone = metarig.data.edit_bones.get(bone_name)
             
         if bone:
+            # If a bone got renamed, it will store its original in a custom property
+            bone['original_bone_name'] = bone.name
             bone.name = BONE_MAPPING[bone_spec]
 
 
