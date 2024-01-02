@@ -1,4 +1,5 @@
 import bpy
+import mathutils
 
 from .checks import is_vrm_rig
 from .common import layer_params, bone_select_set
@@ -387,7 +388,7 @@ def init_rigify_layers(metarig):
 
 
 def setup_rigify(metarig):
-    bpy.ops.object.mode_set(mode='POSE')   
+    bpy.ops.object.mode_set(mode='POSE')
 
     rigify_head(metarig, 'spine.004', layers=[3])
     rigify_shoulder(metarig, 'shoulder.L', layers=[3])
@@ -403,6 +404,72 @@ def setup_rigify(metarig):
         rigify_extra_bone(metarig, name, layers=[19])
     
     init_rigify_layers(metarig)
+
+
+def find_eye_bone(bones, side):
+    for bone in bones:
+        if ('eye.' + side) in bone.name:
+            return bone
+    return None
+
+
+def add_facial_bones(metarig):
+    bpy.ops.object.mode_set(mode='EDIT')
+    
+    bpy.ops.armature.metarig_sample_add(metarig_type='faces.super_face')
+    
+    face_sample_bones = bpy.context.selected_editable_bones
+    
+    eye_L_sample = find_eye_bone(face_sample_bones, 'L')
+    eye_R_sample = find_eye_bone(face_sample_bones, 'R')
+    
+    eye_L_vrm = metarig.data.edit_bones.get('eye.L')
+    eye_R_vrm = metarig.data.edit_bones.get('eye.R')
+    
+    y_diff = eye_L_vrm.tail.y - eye_L_sample.tail.y
+    z_diff = eye_L_vrm.tail.z - eye_L_sample.tail.z
+    
+    yz_translate_vector = mathutils.Vector((0.0, y_diff, z_diff))  # translate vector for face bones other than eye bones
+    
+    ratio = eye_L_vrm.tail.x / eye_L_sample.tail.x  # ratio for facial bones scaling
+    resize_scale = ratio * mathutils.Vector((1.0, 1.0, 1.0))
+    
+    # Move sample eye bones to vrm eye bones
+    eye_L_sample.head = eye_L_vrm.head
+    eye_L_sample.tail = eye_L_vrm.tail
+    
+    eye_R_sample.head = eye_R_vrm.head
+    eye_R_sample.tail = eye_R_vrm.tail
+    
+    # Deselect both eye bones leaving only the other facial bones
+    bone_select_set(eye_L_sample, False)
+    bone_select_set(eye_R_sample, False)
+    
+    mid_eye_position = eye_L_sample.tail.copy()
+    mid_eye_position.x = 0.0
+    
+    bpy.ops.transform.translate(value=yz_translate_vector)
+    bpy.ops.transform.resize(value=resize_scale, center_override=mid_eye_position)
+    
+    # Align 'face' bone to 'spine.006' (head)
+    face_bone = metarig.data.edit_bones.get('face')
+    head_bone = metarig.data.edit_bones.get('spine.006')
+    
+    face_bone.parent = head_bone
+    face_bone.head = head_bone.head
+    face_bone.tail.x = face_bone.head.x
+    face_bone.tail.y = face_bone.head.y
+    
+    # Delete the original eye bones (from vrm)
+    bpy.ops.armature.select_all(action='DESELECT')
+    bone_select_set(eye_L_vrm, True)
+    bone_select_set(eye_R_vrm, True)
+    
+    bpy.ops.armature.delete(confirm=False)
+    
+    # Rename
+    eye_L_sample.name = 'eye.L'
+    eye_R_sample.name = 'eye.R'
 
 
 def generate_metarig(context):
@@ -423,6 +490,8 @@ def generate_metarig(context):
     add_heel_bones(metarig)
     
     setup_rigify(metarig)
+    
+    add_facial_bones(metarig)
 
 
 class GenerateMetarig(bpy.types.Operator):
