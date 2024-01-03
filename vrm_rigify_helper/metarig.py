@@ -492,6 +492,8 @@ def generate_metarig(context):
     setup_rigify(metarig)
     
     add_facial_bones(metarig)
+    
+    bpy.ops.object.mode_set(mode='OBJECT')
 
 
 class GenerateMetarig(bpy.types.Operator):

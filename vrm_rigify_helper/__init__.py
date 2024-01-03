@@ -70,7 +70,8 @@ class VRMRigifyHelperOperatorsPanel(bpy.types.Panel):
         layout = self.layout
         
         row = layout.row()
-        #row.operator("vrm_rigify_helper.generate_vrm_meta_rig")
+        row.operator("vrm_rigify_helper.generate_vrm_meta_rig")  # TODO: remove this
+        row = layout.row()
         row.operator("vrm_rigify_helper.generate_metarig")
         
         row = layout.row()
