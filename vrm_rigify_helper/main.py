@@ -18,7 +18,7 @@ def set_active(context, obj):
 
 
 def do_bone_alignments():
-    bpy.ops.vrm_rigify_helper.align_facial_bones()
+    #bpy.ops.vrm_rigify_helper.align_facial_bones()
     bpy.ops.vrm_rigify_helper.align_head_bone()  # yes, singular bone
     bpy.ops.vrm_rigify_helper.align_hand_bones()
     bpy.ops.vrm_rigify_helper.align_feet_bones()
@@ -79,14 +79,15 @@ def post_generate_setup(context, rigify_rig):
 def generate(context):
     vrm_rig = context.view_layer.objects.active
 
-    bpy.ops.vrm_rigify_helper.generate_vrm_meta_rig()
+    bpy.ops.vrm_rigify_helper.generate_metarig()
     
     metarig = context.view_layer.objects.active
     
-    bpy.ops.vrm_rigify_helper.update_metarig_bone_layers()
+    #bpy.ops.vrm_rigify_helper.update_metarig_bone_layers()
     
     do_bone_alignments()
     
+    comment_out_bone_extraction = """
     deselect_all_objects()
     set_active(context, vrm_rig)
     
@@ -95,11 +96,13 @@ def generate(context):
     # Select and make active the metarig for the extra bones rigs to merge into
     set_active(context, metarig)
     bpy.ops.vrm_rigify_helper.merge_rigs()
+    """
     
     # Set Rig Name if it is not specified in Rigify settings
     if not metarig.data.rigify_rig_basename:
         metarig.data.rigify_rig_basename = metarig.name.replace('metarig', 'rig')
     
+    # TODO: check if metarig is selected before doing this
     bpy.ops.object.duplicate()
     
     duplicate_metarig = context.view_layer.objects.active

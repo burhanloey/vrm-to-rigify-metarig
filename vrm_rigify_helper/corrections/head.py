@@ -15,7 +15,7 @@ def align_head_bone(context):
     
     head_bone.tail.x = 0.0
     head_bone.tail.y = head_bone.head.y
-    head_bone.length = 0.2
+    head_bone.length = 0.2  # TODO: maybe use head mesh to calculate relatively
     
     bpy.ops.object.mode_set(mode='OBJECT')
     
