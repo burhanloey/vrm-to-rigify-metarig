@@ -89,7 +89,32 @@ def find_extra_bone_names(metarig):
     return extra_bone_names
 
 
-def rename_bones(metarig):
+def find_body_mesh_object(objs):
+    for obj in objs:
+        if is_body_mesh(obj):
+            return obj
+    return None
+
+
+def rename_bones(context, metarig):
+    vrm_rig = metarig.get('vrm_rig')
+    
+    # Selecting vrm rig to get mesh objects
+    bpy.ops.object.select_all(action='DESELECT')
+    
+    context.view_layer.objects.active = vrm_rig
+    vrm_rig.select_set(True)
+    
+    bpy.ops.object.select_hierarchy(direction='CHILD', extend=False)
+    
+    mesh_objs = context.selected_objects
+    
+    # Selecting metarig to edit
+    bpy.ops.object.select_all(action='DESELECT')
+    
+    context.view_layer.objects.active = metarig
+    metarig.select_set(True)
+    
     bpy.ops.object.mode_set(mode='EDIT')
     
     human_bones = metarig.data.vrm_addon_extension.vrm0.humanoid.human_bones
@@ -102,11 +127,25 @@ def rename_bones(metarig):
             continue
         
         bone = metarig.data.edit_bones.get(bone_name)
-            
-        if bone:
-            # If a bone got renamed, it will store its original in a custom property
-            bone['original_bone_name'] = bone.name
-            bone.name = BONE_MAPPING[bone_spec]
+        
+        if not bone:
+            continue
+        
+        # If a bone got renamed, it will store its original in a custom property
+        original_name = bone.name
+        new_name = BONE_MAPPING[bone_spec]
+        bone['original_bone_name'] = original_name
+        bone.name = new_name
+        
+        # Also rename the vertex group associated to the renamed bone
+        for obj in mesh_objs:
+            vg = obj.vertex_groups.get(original_name)
+            if vg:
+                vg.name = new_name
+    
+    for obj in mesh_objs:
+        for vg in obj.vertex_groups:
+            vg.name = 'DEF-' + vg.name
 
 
 def remove_unneeded_bones(metarig):
@@ -479,8 +518,9 @@ def generate_metarig(context):
     
     metarig = context.view_layer.objects.active
     metarig.name = vrm_rig.name + '.metarig'
+    metarig['vrm_rig'] = vrm_rig
     
-    rename_bones(metarig)
+    rename_bones(context, metarig)
     
     remove_unneeded_bones(metarig)
     detach_bone_from_parent(metarig, 'spine.004')
