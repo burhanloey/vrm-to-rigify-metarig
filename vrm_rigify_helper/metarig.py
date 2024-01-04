@@ -479,7 +479,6 @@ def generate_metarig(context):
     
     metarig = context.view_layer.objects.active
     metarig.name = vrm_rig.name + '.metarig'
-    metarig.data.name = vrm_rig.data.name + '.metarig'
     
     rename_bones(metarig)
     
