@@ -4,6 +4,21 @@ import bmesh
 from ..checks import is_metarig, is_body_mesh
 
 
+def switch_active_object(context, obj):
+    current_mode = context.view_layer.objects.active.mode
+    if current_mode != 'OBJECT':
+        bpy.ops.object.mode_set(mode='OBJECT')
+    bpy.ops.object.select_all(action='DESELECT')
+    context.view_layer.objects.active = obj
+    obj.select_set(True)
+
+
+def select_only_vertex_group(group_name):
+    bpy.ops.mesh.select_all(action='DESELECT')
+    bpy.ops.object.vertex_group_set_active(group=group_name)
+    bpy.ops.object.vertex_group_select()
+
+
 def find_body_mesh_object(objs):
     for obj in objs:
         if is_body_mesh(obj):
@@ -11,28 +26,11 @@ def find_body_mesh_object(objs):
     return None
 
 
-def align_feet_bones(context):
-    metarig = context.view_layer.objects.active
-    vrm_rig = metarig['vrm_rig']
-    
-    bpy.ops.object.select_all(action='DESELECT')
-    context.view_layer.objects.active = vrm_rig
-    vrm_rig.select_set(True)
-    
-    bpy.ops.object.select_hierarchy(direction='CHILD', extend=False)
-    
-    body_mesh = find_body_mesh_object(context.selected_objects)
-    
-    bpy.ops.object.select_all(action='DESELECT')
-    context.view_layer.objects.active = body_mesh
-    body_mesh.select_set(True)
-    
+def align_heel_bones(context, metarig, body_mesh):
+    switch_active_object(context, body_mesh)
     bpy.ops.object.mode_set(mode='EDIT')
-    bpy.ops.mesh.select_all(action='DESELECT')
-    bpy.ops.object.vertex_group_set_active(group='DEF-foot.L')
-    bpy.ops.object.vertex_group_select()
+    select_only_vertex_group('DEF-foot.L')
     
-    # TODO: Find position of ankle and how wide it should be. Find toe joint position and end of toe position.
     bm = bmesh.from_edit_mesh(body_mesh.data)
     bm.faces.active = None
     
@@ -53,12 +51,11 @@ def align_feet_bones(context):
         if v_global_pos.x > heel_tail_x:
             heel_tail_x = v_global_pos.x
     
-    bpy.ops.object.mode_set(mode='OBJECT')
-    bpy.ops.object.select_all(action='DESELECT')
-    context.view_layer.objects.active = metarig
-    metarig.select_set(True)
+    bm.free()
     
+    switch_active_object(context, metarig)
     bpy.ops.object.mode_set(mode='EDIT')
+    
     initial_mirror_setting = metarig.data.use_mirror_x
     metarig.data.use_mirror_x = True
     
@@ -68,21 +65,26 @@ def align_feet_bones(context):
     heel_bone.tail.x = heel_tail_x
     heel_bone.tail.y = heel_y
     
+    metarig.data.use_mirror_x = initial_mirror_setting
+
+
+def align_feet_bones(context):
+    metarig = context.view_layer.objects.active
+    vrm_rig = metarig['vrm_rig']
+    
+    switch_active_object(context, vrm_rig)
+    bpy.ops.object.select_hierarchy(direction='CHILD', extend=False)
+    body_mesh = find_body_mesh_object(context.selected_objects)
+    
+    align_heel_bones(context, metarig, body_mesh)
+    
     # TODO: do the same for these
     toe_y = 0.0
     toe_z = 0.0
     toe_end_y = 0.0
     toe_end_z = 0.0
     
-    #for v in bm.verts:
-    #    if v.select:
-            
-    
-    
-    
-    
-    
-    # TODO: align feet bones relative to the mesh
+    # TODO: align toe bones relative to the mesh
     
     
     
@@ -100,10 +102,6 @@ def align_feet_bones(context):
     heel_bone.head.y = heel_bone.tail.y = 0.072
     heel_bone.head.z = heel_bone.tail.z = 0
     """
-    
-    bm.free()
-    
-    metarig.data.use_mirror_x = initial_mirror_setting
     
     bpy.ops.object.mode_set(mode='OBJECT')
 
