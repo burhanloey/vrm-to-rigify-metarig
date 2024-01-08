@@ -93,52 +93,27 @@ def align_heel_bones(context, metarig, body_mesh):
 def align_toe_bones(context, metarig, body_mesh):
     switch_active_object(context, body_mesh)
     bpy.ops.object.mode_set(mode='EDIT')
-    select_only_vertex_group('DEF-foot.L')
-    
-    bm = bmesh.from_edit_mesh(body_mesh.data)
-    bm.faces.active = None
-    
-    selected_verts = list(filter(lambda v: v.select, bm.verts))
-    any_vert_global_pos = selected_verts[0].co @ body_mesh.matrix_world
-    
-    foot_front_y = any_vert_global_pos.y
-    
-    for v in selected_verts:
-        v_global_pos = v.co @ body_mesh.matrix_world
-        
-        if v_global_pos.y < foot_front_y:  # -ve is towards front
-            foot_front_y = v_global_pos.y
-    
-    bm.free()
-    
     select_only_vertex_group('DEF-toe.L')
     
-    bm = bmesh.from_edit_mesh(body_mesh.data)
-    bm.faces.active = None
-    
-    selected_verts = list(filter(lambda v: v.select, bm.verts))
-    any_vert_global_pos = selected_verts[0].co @ body_mesh.matrix_world
-    
-    toe_base_y = any_vert_global_pos.y
-    
-    for v in selected_verts:
-        v_global_pos = v.co @ body_mesh.matrix_world
+    with bmesh_editing(body_mesh) as bm:
+        selected_verts = list(filter(lambda v: v.select, bm.verts))
+        any_vert_global_pos = selected_verts[0].co @ body_mesh.matrix_world
         
-        if v_global_pos.y > toe_base_y:  # -ve is towards front
-            toe_base_y = v_global_pos.y
+        toe_front_y = any_vert_global_pos.y
+        
+        for v in selected_verts:
+            v_global_pos = v.co @ body_mesh.matrix_world
+            
+            if v_global_pos.y < toe_front_y:  # -ve is towards front
+                toe_front_y = v_global_pos.y
     
-    bm.free()
-    
-    toe_head_y = (foot_front_y + toe_base_y) / 2
-    
-    switch_active_object(context, metarig)
-    bpy.ops.object.mode_set(mode='EDIT')
-    
-    initial_mirror_setting = metarig.data.use_mirror_x
-    metarig.data.use_mirror_x = True
-    
-    toe_bone = metarig.data.edit_bones.get('toe.L')
-    toe_bone.head.y = toe_head_y
+        switch_active_object(context, metarig)
+        bpy.ops.object.mode_set(mode='EDIT')
+        
+        with symmetry(metarig):
+            toe_bone = metarig.data.edit_bones.get('toe.L')
+            toe_bone.tail.y = toe_front_y
+            toe_bone.tail.z = toe_bone.head.z
 
 
 def align_feet_bones(context):
@@ -151,31 +126,6 @@ def align_feet_bones(context):
     
     align_heel_bones(context, metarig, body_mesh)
     align_toe_bones(context, metarig, body_mesh)
-    
-    # TODO: do the same for these
-    toe_y = 0.0
-    toe_z = 0.0
-    toe_end_y = 0.0
-    toe_end_z = 0.0
-    
-    # TODO: align toe bones relative to the mesh
-    
-    
-    
-    commented_out = """
-    foot_bone = metarig.data.edit_bones.get('foot.L')
-    foot_bone.tail.z = 0.0167
-    
-    toe_bone = metarig.data.edit_bones.get('toe.L')
-    toe_bone.tail.z = 0.0167
-    toe_bone.length = 0.05
-    
-    heel_bone = metarig.data.edit_bones.get('heel.02.L')
-    heel_bone.head.x = 0.042
-    heel_bone.tail.x = 0.115
-    heel_bone.head.y = heel_bone.tail.y = 0.072
-    heel_bone.head.z = heel_bone.tail.z = 0
-    """
     
     bpy.ops.object.mode_set(mode='OBJECT')
 
