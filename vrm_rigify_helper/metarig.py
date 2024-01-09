@@ -203,7 +203,7 @@ def change_bone_layers(rig, bone_name, layers):
     bpy.ops.pose.bone_layers(layers=layer_params(layers))
 
 
-def rigify_head(metarig, bone_name, layers):
+def rigify_head(metarig, bone_name, layers, tweak_layers):
     pose_bone = metarig.pose.bones[bone_name]
     pose_bone.rigify_type = 'spines.super_head'
     
@@ -212,7 +212,7 @@ def rigify_head(metarig, bone_name, layers):
     params = pose_bone.rigify_parameters
     params.connect_chain = True
     params.tweak_layers_extra = True
-    params.tweak_layers = layer_params([4])
+    params.tweak_layers = layer_params(tweak_layers)
     
     change_bone_layers(metarig, bone_name, layers)
 
@@ -429,7 +429,7 @@ def init_rigify_layers(metarig):
 def setup_rigify(metarig):
     bpy.ops.object.mode_set(mode='POSE')
 
-    rigify_head(metarig, 'spine.004', layers=[3])
+    rigify_head(metarig, 'spine.004', layers=[3], tweak_layers=[4])
     rigify_shoulder(metarig, 'shoulder.L', layers=[3])
     rigify_shoulder(metarig, 'shoulder.R', layers=[3])
     rigify_arm(metarig, 'upper_arm.L', layers=[7], fk_layers=[8], tweak_layers=[9])
@@ -452,12 +452,23 @@ def find_eye_bone(bones, side):
     return None
 
 
-def add_facial_bones(metarig):
+def add_facial_bones(metarig, layers, primary_layers, secondary_layers):
     bpy.ops.object.mode_set(mode='EDIT')
     
     bpy.ops.armature.metarig_sample_add(metarig_type='faces.super_face')
     
     face_sample_bones = bpy.context.selected_editable_bones
+    bpy.ops.armature.bone_layers(layers=layer_params(layers))
+    
+    bpy.ops.object.mode_set(mode='POSE')
+    
+    params = metarig.pose.bones['face'].rigify_parameters
+    params.primary_layers_extra = True
+    params.primary_layers = layer_params(primary_layers)
+    params.secondary_layers_extra = True
+    params.secondary_layers = layer_params(secondary_layers)
+    
+    bpy.ops.object.mode_set(mode='EDIT')
     
     eye_L_sample = find_eye_bone(face_sample_bones, 'L')
     eye_R_sample = find_eye_bone(face_sample_bones, 'R')
@@ -530,7 +541,7 @@ def generate_metarig(context):
     
     setup_rigify(metarig)
     
-    add_facial_bones(metarig)
+    add_facial_bones(metarig, layers=[0], primary_layers=[1], secondary_layers=[2])
     
     bpy.ops.object.mode_set(mode='OBJECT')
 
