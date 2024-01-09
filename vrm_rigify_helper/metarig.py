@@ -452,23 +452,13 @@ def find_eye_bone(bones, side):
     return None
 
 
-def add_facial_bones(metarig, layers, primary_layers, secondary_layers):
+def add_facial_bones(context, metarig, layers, primary_layers, secondary_layers):
     bpy.ops.object.mode_set(mode='EDIT')
     
     bpy.ops.armature.metarig_sample_add(metarig_type='faces.super_face')
     
-    face_sample_bones = bpy.context.selected_editable_bones
+    face_sample_bones = context.selected_editable_bones
     bpy.ops.armature.bone_layers(layers=layer_params(layers))
-    
-    bpy.ops.object.mode_set(mode='POSE')
-    
-    params = metarig.pose.bones['face'].rigify_parameters
-    params.primary_layers_extra = True
-    params.primary_layers = layer_params(primary_layers)
-    params.secondary_layers_extra = True
-    params.secondary_layers = layer_params(secondary_layers)
-    
-    bpy.ops.object.mode_set(mode='EDIT')
     
     eye_L_sample = find_eye_bone(face_sample_bones, 'L')
     eye_R_sample = find_eye_bone(face_sample_bones, 'R')
@@ -520,6 +510,14 @@ def add_facial_bones(metarig, layers, primary_layers, secondary_layers):
     # Rename
     eye_L_sample.name = 'eye.L'
     eye_R_sample.name = 'eye.R'
+    
+    bpy.ops.object.mode_set(mode='POSE')
+    
+    params = metarig.pose.bones['face'].rigify_parameters
+    params.primary_layers_extra = True
+    params.primary_layers = layer_params(primary_layers)
+    params.secondary_layers_extra = True
+    params.secondary_layers = layer_params(secondary_layers)
 
 
 def generate_metarig(context):
@@ -541,7 +539,7 @@ def generate_metarig(context):
     
     setup_rigify(metarig)
     
-    add_facial_bones(metarig, layers=[0], primary_layers=[1], secondary_layers=[2])
+    add_facial_bones(context, metarig, layers=[0], primary_layers=[1], secondary_layers=[2])
     
     bpy.ops.object.mode_set(mode='OBJECT')
 

@@ -18,7 +18,6 @@ def set_active(context, obj):
 
 
 def do_bone_alignments():
-    #bpy.ops.vrm_rigify_helper.align_facial_bones()
     bpy.ops.vrm_rigify_helper.align_head_bone()  # yes, singular bone
     bpy.ops.vrm_rigify_helper.align_hand_bones()
     bpy.ops.vrm_rigify_helper.align_feet_bones()
@@ -34,6 +33,10 @@ def transfer_meshes(context, source, destination):
     deselect_all_objects()
     set_active(context, source)
     bpy.ops.object.select_hierarchy(direction='CHILD', extend=False)
+    
+    for obj in context.selected_objects:
+        if obj.type != 'MESH':
+            obj.select_set(False)
     
     set_active(context, destination)
     bpy.ops.object.parent_set(type='OBJECT')
@@ -83,26 +86,12 @@ def generate(context):
     
     metarig = context.view_layer.objects.active
     
-    #bpy.ops.vrm_rigify_helper.update_metarig_bone_layers()
-    
     do_bone_alignments()
-    
-    comment_out_bone_extraction = """
-    deselect_all_objects()
-    set_active(context, vrm_rig)
-    
-    bpy.ops.vrm_rigify_helper.extract_vrm_extra_bones_as_rigify()
-    
-    # Select and make active the metarig for the extra bones rigs to merge into
-    set_active(context, metarig)
-    bpy.ops.vrm_rigify_helper.merge_rigs()
-    """
     
     # Set Rig Name if it is not specified in Rigify settings
     if not metarig.data.rigify_rig_basename:
         metarig.data.rigify_rig_basename = metarig.name.replace('metarig', 'rig')
     
-    # TODO: check if metarig is selected before doing this
     bpy.ops.object.duplicate()
     
     duplicate_metarig = context.view_layer.objects.active
@@ -117,9 +106,6 @@ def generate(context):
     
     transfer_meshes(context, source=vrm_rig, destination=rigify_rig)
     update_meshes_armature_modifiers(context, rigify_rig)
-    
-    # All the meshes are still selected at this point
-    bpy.ops.vrm_rigify_helper.rename_vrm_vertex_groups_to_rigify()
     
     # Cleanup duplicate metarig
     deselect_all_objects()
