@@ -61,15 +61,11 @@ class VRMRigifyHelperOperatorsPanel(bpy.types.Panel):
         row = layout.row()
         row.operator("vrm_rigify_helper.generate_metarig")
         
-        row = layout.row()
-        row.label(text="Bone alignment:")
-        
-        row = layout.row()
-        row.operator("vrm_rigify_helper.align_head_bone", text="Head")
-        row.operator("vrm_rigify_helper.align_hand_bones", text="Hand")
-        row.operator("vrm_rigify_helper.align_feet_bones", text="Feet")
-        
-        row = layout.separator()
+        col = layout.column(align=True)
+        col.label(text="Bone alignment:")
+        col.operator("vrm_rigify_helper.align_head_bone", text="Head")
+        col.operator("vrm_rigify_helper.align_hand_bones", text="Hand")
+        col.operator("vrm_rigify_helper.align_feet_bones", text="Feet")
         
         row = layout.row()
         row.operator("vrm_rigify_helper.remove_unused_bones")
@@ -90,18 +86,13 @@ class VRMRigifyHelperUtilitiesPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         
-        row = layout.row()
-        row.operator("vrm_rigify_helper.enable_all_ik_stretch")
-        row = layout.row()
-        row.operator("vrm_rigify_helper.disable_all_ik_stretch")
+        col = layout.column(align=True)
+        col.operator("vrm_rigify_helper.enable_all_ik_stretch")
+        col.operator("vrm_rigify_helper.disable_all_ik_stretch")
         
-        row = layout.separator()
-        
-        row = layout.row()
-        row.operator("vrm_rigify_helper.show_default_visible_layers")
-        
-        row = layout.row()
-        row.operator("vrm_rigify_helper.show_all_control_layers")
+        col = layout.column(align=True)
+        col.operator("vrm_rigify_helper.show_default_visible_layers")
+        col.operator("vrm_rigify_helper.show_all_control_layers")
 
 
 CLASSES = [
