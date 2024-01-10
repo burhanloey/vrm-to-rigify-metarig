@@ -66,7 +66,6 @@ def post_generate_setup(context, rigify_rig):
     face_mesh.select_set(True)
     
     bpy.ops.vrm_rigify_helper.fix_eye_direction()
-    bpy.ops.vrm_rigify_helper.enable_cloth_follow()
     bpy.ops.vrm_rigify_helper.disable_all_ik_stretch()
     
     deselect_all_pose_bones()
@@ -136,13 +135,6 @@ def regenerate(context):
     bpy.ops.object.delete(use_global=True, confirm=False)
     
     post_generate_setup(context, rigify_rig)
-    
-
-def has_children_that_is_not_collider(obj):
-    for child in obj.children:
-        if 'collider' not in child.name.casefold():
-            return True
-    return False
 
 
 class OneClickSetup(bpy.types.Operator):
@@ -153,6 +145,12 @@ class OneClickSetup(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
+        def has_children_that_is_not_collider(obj):
+            for child in obj.children:
+                if 'collider' not in child.name.casefold():
+                    return True
+            return False
+    
         obj = context.view_layer.objects.active
         return is_vrm_rig(obj) and has_children_that_is_not_collider(obj)
 
