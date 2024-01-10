@@ -19,6 +19,7 @@ from .corrections.hand import AlignHandBones
 from .corrections.feet import AlignFeetBones
 from .utils.ik_stretch import EnableAllIKStretch, DisableAllIKStretch
 from .utils.eye_fix import FixEyeDirection
+from .utils.modifiers import HideToonShaderInViewport, ShowToonShaderInViewport
 from .metarig import GenerateMetarig
 from .main import OneClickSetup, Regenerate
 
@@ -91,6 +92,10 @@ class VRMRigifyHelperUtilitiesPanel(bpy.types.Panel):
         col.operator("vrm_rigify_helper.disable_all_ik_stretch")
         
         col = layout.column(align=True)
+        col.operator("vrm_rigify_helper.hide_toon_shader")
+        col.operator("vrm_rigify_helper.show_toon_shader")
+        
+        col = layout.column(align=True)
         col.operator("vrm_rigify_helper.show_default_visible_layers")
         col.operator("vrm_rigify_helper.show_all_control_layers")
 
@@ -105,6 +110,8 @@ CLASSES = [
     EnableAllIKStretch,
     DisableAllIKStretch,
     FixEyeDirection,
+    HideToonShaderInViewport,
+    ShowToonShaderInViewport,
     VRMRigifyHelperMainPanel,
     VRMRigifyHelperOperatorsPanel,
     VRMRigifyHelperUtilitiesPanel,
