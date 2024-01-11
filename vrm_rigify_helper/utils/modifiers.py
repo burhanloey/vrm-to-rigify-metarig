@@ -37,7 +37,7 @@ class BaseToonShaderOperator(bpy.types.Operator):
 
 class HideToonShaderInViewport(BaseToonShaderOperator):
     """Hide toon shader modifiers in viewport"""
-    bl_idname = "vrm_rigify_helper.hide_toon_shader"
+    bl_idname = "vrm_to_rigify_metarig.hide_toon_shader"
     bl_label = "Hide Toon Shader"
 
     def execute(self, context):
@@ -47,7 +47,7 @@ class HideToonShaderInViewport(BaseToonShaderOperator):
 
 class ShowToonShaderInViewport(BaseToonShaderOperator):
     """Make toon shader modifiers visible in viewport"""
-    bl_idname = "vrm_rigify_helper.show_toon_shader"
+    bl_idname = "vrm_to_rigify_metarig.show_toon_shader"
     bl_label = "Show Toon Shader"
 
     def execute(self, context):

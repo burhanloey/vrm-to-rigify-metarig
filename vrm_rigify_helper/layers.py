@@ -41,7 +41,7 @@ IK_LAYERS = [
         
 class ShowDefaultVisibleLayers(bpy.types.Operator):
     """Show default visible layers"""
-    bl_idname = "vrm_rigify_helper.show_default_visible_layers"
+    bl_idname = "vrm_to_rigify_metarig.show_default_visible_layers"
     bl_label = "Show Default Visible Layers"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -58,7 +58,7 @@ class ShowDefaultVisibleLayers(bpy.types.Operator):
         
 class ShowAllControlLayers(bpy.types.Operator):
     """Show default visible layers"""
-    bl_idname = "vrm_rigify_helper.show_all_control_layers"
+    bl_idname = "vrm_to_rigify_metarig.show_all_control_layers"
     bl_label = "Show All Control Layers"
     bl_options = {'REGISTER', 'UNDO'}
 

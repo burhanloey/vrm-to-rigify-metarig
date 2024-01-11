@@ -109,7 +109,7 @@ def align_hand_bones(context):
 
 class AlignHandBones(bpy.types.Operator):
     """Align hand bone to cover the whole palm. Fix the arm bone rolls. Bend the fingers towards proper direction"""
-    bl_idname = "vrm_rigify_helper.align_hand_bones"
+    bl_idname = "vrm_to_rigify_metarig.align_hand_bones"
     bl_label = "Align Hand Bones"
     bl_options = {'REGISTER', 'UNDO'}
 

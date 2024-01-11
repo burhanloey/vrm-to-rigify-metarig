@@ -539,7 +539,7 @@ def generate_metarig(context):
 
 class GenerateMetarig(bpy.types.Operator):
     """Generate rigify metarig from vrm armature"""
-    bl_idname = "vrm_rigify_helper.generate_metarig"
+    bl_idname = "vrm_to_rigify_metarig.generate_metarig"
     bl_label = "Generate Metarig"
     bl_options = {'REGISTER', 'UNDO'}
 

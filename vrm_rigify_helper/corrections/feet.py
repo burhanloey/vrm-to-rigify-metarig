@@ -80,7 +80,7 @@ def align_feet_bones(context):
 
 class AlignFeetBones(bpy.types.Operator):
     """Align feet bones"""
-    bl_idname = "vrm_rigify_helper.align_feet_bones"
+    bl_idname = "vrm_to_rigify_metarig.align_feet_bones"
     bl_label = "Align Feet Bones"
     bl_options = {'REGISTER', 'UNDO'}
 

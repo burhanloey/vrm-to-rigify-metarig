@@ -41,7 +41,7 @@ class BaseIKStretchOperator(bpy.types.Operator):
 
 class EnableAllIKStretch(BaseIKStretchOperator):
     """Enable IK stretch on all IK controls"""
-    bl_idname = "vrm_rigify_helper.enable_all_ik_stretch"
+    bl_idname = "vrm_to_rigify_metarig.enable_all_ik_stretch"
     bl_label = "Enable All IK Stretch"
 
     def execute(self, context):
@@ -51,7 +51,7 @@ class EnableAllIKStretch(BaseIKStretchOperator):
         
 class DisableAllIKStretch(BaseIKStretchOperator):
     """Disable IK stretch on all IK controls"""
-    bl_idname = "vrm_rigify_helper.disable_all_ik_stretch"
+    bl_idname = "vrm_to_rigify_metarig.disable_all_ik_stretch"
     bl_label = "Disable All IK Stretch"
 
     def execute(self, context):
