@@ -89,13 +89,6 @@ def find_extra_bone_names(metarig):
     return extra_bone_names
 
 
-def find_body_mesh_object(objs):
-    for obj in objs:
-        if is_body_mesh(obj):
-            return obj
-    return None
-
-
 def rename_bones(context, metarig):
     vrm_rig = metarig.get('vrm_rig')
     

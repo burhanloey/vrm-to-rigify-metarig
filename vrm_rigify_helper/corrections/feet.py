@@ -1,59 +1,7 @@
 import bpy
-import bmesh
 
 from ..checks import is_metarig, is_body_mesh
-
-
-def select_only_vertex_group(group_name):
-    bpy.ops.mesh.select_all(action='DESELECT')
-    bpy.ops.object.vertex_group_set_active(group=group_name)
-    bpy.ops.object.vertex_group_select()
-
-
-class BMeshEditing:
-    def __init__(self, mesh_obj):
-        self.mesh_obj = mesh_obj
-    def __enter__(self):
-        self.bm = bmesh.from_edit_mesh(self.mesh_obj.data)
-        self.bm.faces.active = None
-        return self.bm
-    def __exit__(self, _type, _value, _trace):
-        self.bm.free()
-
-
-def bmesh_editing(mesh_obj):
-    return BMeshEditing(mesh_obj)
-
-
-class Symmetry:
-    def __init__(self, obj):
-        self.obj = obj
-    def __enter__(self):
-        self.initial_setting = self.obj.data.use_mirror_x
-        self.obj.data.use_mirror_x = True
-    def __exit__(self, _type, _value, _trace):
-        if self.obj.data.use_mirror_x != self.initial_setting:
-            self.obj.data.use_mirror_x = self.initial_setting
-
-
-def symmetry(obj):
-    return Symmetry(obj)
-
-
-def switch_active_object(context, obj):
-    current_mode = context.view_layer.objects.active.mode
-    if current_mode != 'OBJECT':
-        bpy.ops.object.mode_set(mode='OBJECT')
-    bpy.ops.object.select_all(action='DESELECT')
-    context.view_layer.objects.active = obj
-    obj.select_set(True)
-
-
-def find_body_mesh_object(objs):
-    for obj in objs:
-        if is_body_mesh(obj):
-            return obj
-    return None
+from ..common import bmesh_editing, symmetrical_editing, switch_active_object, find_body_mesh_object, select_only_vertex_group
 
 
 def align_heel_bones(context, metarig, body_mesh):
@@ -82,7 +30,7 @@ def align_heel_bones(context, metarig, body_mesh):
         switch_active_object(context, metarig)
         bpy.ops.object.mode_set(mode='EDIT')
         
-        with symmetry(metarig):
+        with symmetrical_editing(metarig):
             heel_bone = metarig.data.edit_bones.get('heel.02.L')
             heel_bone.head.x = heel_head_x
             heel_bone.head.y = heel_y
@@ -110,7 +58,7 @@ def align_toe_bones(context, metarig, body_mesh):
         switch_active_object(context, metarig)
         bpy.ops.object.mode_set(mode='EDIT')
         
-        with symmetry(metarig):
+        with symmetrical_editing(metarig):
             toe_bone = metarig.data.edit_bones.get('toe.L')
             toe_bone.tail.y = toe_front_y
             toe_bone.tail.z = toe_bone.head.z
