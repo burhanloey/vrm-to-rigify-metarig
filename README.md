@@ -1,6 +1,6 @@
-# vrm-rigify-helper
+# VRM To Rigify Metarig
 
-Helper addon for vrm-rigify
+Generate Rigify armature and metarig from VRM model
 
 ## Installation
 
@@ -13,7 +13,7 @@ Helper addon for vrm-rigify
 1. Import a VRM model.
 2. Select the imported armature model.
 3. Open 3D viewport sidebar panel (press N).
-4. Open `VRM Rigify Helper` tab.
+4. Open `VRM To Rigify Metarig` tab.
 5. Click `One-Click Setup`.
 
 ## License
