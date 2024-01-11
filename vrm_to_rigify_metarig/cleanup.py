@@ -91,7 +91,7 @@ def remove_unused_bones(context):
 
 class RemoveUnusedBones(bpy.types.Operator):
     """Remove mostly the facial bones since facial expressions are done with shape keys"""
-    bl_idname = "vrm_rigify_helper.remove_unused_bones"
+    bl_idname = "vrm_to_rigify_metarig.remove_unused_bones"
     bl_label = "Remove Unused Bones"
     bl_options = {'REGISTER', 'UNDO'}
 

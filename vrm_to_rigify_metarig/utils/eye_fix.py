@@ -67,7 +67,7 @@ def fix_eye_direction(context):
 
 class FixEyeDirection(bpy.types.Operator):
     """Fix eye direction to look at the control bone"""
-    bl_idname = "vrm_rigify_helper.fix_eye_direction"
+    bl_idname = "vrm_to_rigify_metarig.fix_eye_direction"
     bl_label = "Fix Eye Direction"
     bl_options = {'REGISTER', 'UNDO'}
 

@@ -32,3 +32,7 @@ def is_metarig(obj):
 
 def is_face_mesh(obj):
     return obj.name and 'face' in obj.name.casefold() and obj.type == 'MESH'
+
+
+def is_body_mesh(obj):
+    return obj.name and 'body' in obj.name.casefold() and obj.type == 'MESH'

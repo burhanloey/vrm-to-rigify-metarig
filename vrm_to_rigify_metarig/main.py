@@ -18,10 +18,9 @@ def set_active(context, obj):
 
 
 def do_bone_alignments():
-    bpy.ops.vrm_rigify_helper.align_facial_bones()
-    bpy.ops.vrm_rigify_helper.align_head_bone()  # yes, singular bone
-    bpy.ops.vrm_rigify_helper.align_hand_bones()
-    bpy.ops.vrm_rigify_helper.align_feet_bones()
+    bpy.ops.vrm_to_rigify_metarig.align_head_bone()  # yes, singular bone
+    bpy.ops.vrm_to_rigify_metarig.align_hand_bones()
+    bpy.ops.vrm_to_rigify_metarig.align_feet_bones()
 
 
 def copy_rigify_settings(source, destination):
@@ -34,6 +33,10 @@ def transfer_meshes(context, source, destination):
     deselect_all_objects()
     set_active(context, source)
     bpy.ops.object.select_hierarchy(direction='CHILD', extend=False)
+    
+    for obj in context.selected_objects:
+        if obj.type != 'MESH':
+            obj.select_set(False)
     
     set_active(context, destination)
     bpy.ops.object.parent_set(type='OBJECT')
@@ -52,7 +55,7 @@ def post_generate_setup(context, rigify_rig):
     deselect_all_objects()
     set_active(context, rigify_rig)
     
-    bpy.ops.vrm_rigify_helper.remove_unused_bones()
+    bpy.ops.vrm_to_rigify_metarig.remove_unused_bones()
     
     bpy.ops.object.select_hierarchy(direction='CHILD', extend=False)
     
@@ -62,13 +65,12 @@ def post_generate_setup(context, rigify_rig):
     set_active(context, rigify_rig)
     face_mesh.select_set(True)
     
-    bpy.ops.vrm_rigify_helper.fix_eye_direction()
-    bpy.ops.vrm_rigify_helper.enable_cloth_follow()
-    bpy.ops.vrm_rigify_helper.disable_all_ik_stretch()
+    bpy.ops.vrm_to_rigify_metarig.fix_eye_direction()
+    bpy.ops.vrm_to_rigify_metarig.disable_all_ik_stretch()
     
     deselect_all_pose_bones()
     
-    bpy.ops.vrm_rigify_helper.show_default_visible_layers()
+    bpy.ops.vrm_to_rigify_metarig.show_default_visible_layers()
     
     bpy.ops.object.mode_set(mode='OBJECT')
     
@@ -79,22 +81,11 @@ def post_generate_setup(context, rigify_rig):
 def generate(context):
     vrm_rig = context.view_layer.objects.active
 
-    bpy.ops.vrm_rigify_helper.generate_vrm_meta_rig()
+    bpy.ops.vrm_to_rigify_metarig.generate_metarig()
     
     metarig = context.view_layer.objects.active
     
-    bpy.ops.vrm_rigify_helper.update_metarig_bone_layers()
-    
     do_bone_alignments()
-    
-    deselect_all_objects()
-    set_active(context, vrm_rig)
-    
-    bpy.ops.vrm_rigify_helper.extract_vrm_extra_bones_as_rigify()
-    
-    # Select and make active the metarig for the extra bones rigs to merge into
-    set_active(context, metarig)
-    bpy.ops.vrm_rigify_helper.merge_rigs()
     
     # Set Rig Name if it is not specified in Rigify settings
     if not metarig.data.rigify_rig_basename:
@@ -114,9 +105,6 @@ def generate(context):
     
     transfer_meshes(context, source=vrm_rig, destination=rigify_rig)
     update_meshes_armature_modifiers(context, rigify_rig)
-    
-    # All the meshes are still selected at this point
-    bpy.ops.vrm_rigify_helper.rename_vrm_vertex_groups_to_rigify()
     
     # Cleanup duplicate metarig
     deselect_all_objects()
@@ -147,23 +135,22 @@ def regenerate(context):
     bpy.ops.object.delete(use_global=True, confirm=False)
     
     post_generate_setup(context, rigify_rig)
-    
-
-def has_children_that_is_not_collider(obj):
-    for child in obj.children:
-        if 'collider' not in child.name.casefold():
-            return True
-    return False
 
 
 class OneClickSetup(bpy.types.Operator):
     """Setup everything using the operators"""
-    bl_idname = "vrm_rigify_helper.one_click_setup"
+    bl_idname = "vrm_to_rigify_metarig.one_click_setup"
     bl_label = "One-Click Setup"
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
     def poll(cls, context):
+        def has_children_that_is_not_collider(obj):
+            for child in obj.children:
+                if 'collider' not in child.name.casefold():
+                    return True
+            return False
+    
         obj = context.view_layer.objects.active
         return is_vrm_rig(obj) and has_children_that_is_not_collider(obj)
 
@@ -174,7 +161,7 @@ class OneClickSetup(bpy.types.Operator):
 
 class Regenerate(bpy.types.Operator):
     """Regenerate using the metarig"""
-    bl_idname = "vrm_rigify_helper.regenerate"
+    bl_idname = "vrm_to_rigify_metarig.regenerate"
     bl_label = "Regenerate"
     bl_options = {'REGISTER', 'UNDO'}
 
