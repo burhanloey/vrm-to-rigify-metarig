@@ -2,6 +2,7 @@ import bpy
 import mathutils
 
 from ..checks import is_rigify_rig, is_face_mesh
+from ..common import select_only_vertex_group
 
 
 def find_face_mesh_object(objs):
@@ -18,12 +19,8 @@ def has_face_mesh_object(objs):
 def find_eye_mesh_x_location(context, face_obj):
     context.view_layer.objects.active = face_obj
     bpy.ops.object.mode_set(mode='EDIT')
-    bpy.ops.mesh.select_all(action='DESELECT')
     
-    # Select left eye vertex group
-    eye_L_vg = face_obj.vertex_groups['DEF-eye.L']
-    face_obj.vertex_groups.active = eye_L_vg
-    bpy.ops.object.vertex_group_select()
+    select_only_vertex_group('DEF-eye.L')
     
     bpy.ops.view3d.snap_cursor_to_selected()
     
