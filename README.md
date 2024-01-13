@@ -44,9 +44,9 @@ This addon will try to fix the eye direction by using the middle point of the ir
 
 To recalibrate the eye direction:
 
-1. Position 3D Cursor right at the pupil of the **LEFT** eye.
-    1. Easiest way to do this is to go to edit mode and select the vertex (or vertices) that is located at the pupil. Then, snap the cursor (`Mesh` > `Snap` > `Cursor to Selected`).
-    2. Another way is to create an empty and adjust the position of the empty to the pupil, then snap the 3D cursor to it (`Object` > `Snap` > `Cursor to Selected`).
+1. Position 3D Cursor right at the pupil of the **LEFT** eye (`Shift`+`RMB` for default keymapping, `LMB` for right-click select keymapping).
+    - You can also go to edit mode and select the vertex (or vertices) that is located at the pupil. Then, snap the cursor (`Mesh` > `Snap` > `Cursor to Selected`).
+    - Another way is to create an empty and adjust the position of the empty to the pupil, then snap the 3D cursor to it (`Object` > `Snap` > `Cursor to Selected`).
 2. Click `Recalibrate Eye Direction` under `Utilities` panel.
 
 ### Other utilities
