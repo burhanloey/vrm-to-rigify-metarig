@@ -55,6 +55,11 @@ To recalibrate the eye direction:
 2. Hide/show toon shader. Useful for low performance hardware.
 3. Show default/show all control layers.
 
+## Other similar addons
+
+- [vrm-rigify](https://github.com/nanoskript/vrm-rigify)
+- [VRigify](https://github.com/Silvergust/VRigify)
+
 ## License
 
 MIT License
