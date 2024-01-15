@@ -20,6 +20,7 @@ from .corrections.feet import AlignFeetBones
 from .utils.ik_stretch import EnableAllIKStretch, DisableAllIKStretch
 from .utils.eye_fix import FixEyeDirection, RecalibrateEyeDirection
 from .utils.modifiers import HideToonShaderInViewport, ShowToonShaderInViewport
+from .utils.look_at import LookAtObjectConstraint, ClearLookAtConstraint
 from .metarig import GenerateMetarig
 from .main import OneClickSetup, Regenerate
 
@@ -99,6 +100,10 @@ class VRMToRigifyMetarigUtilitiesPanel(bpy.types.Panel):
         col.operator("vrm_to_rigify_metarig.recalibrate_eye_direction")
         
         col = layout.column(align=True)
+        col.operator("vrm_to_rigify_metarig.look_at_object_constraint")
+        col.operator("vrm_to_rigify_metarig.clear_look_at_constraint")
+        
+        col = layout.column(align=True)
         col.operator("vrm_to_rigify_metarig.show_default_visible_layers")
         col.operator("vrm_to_rigify_metarig.show_all_control_layers")
 
@@ -116,6 +121,8 @@ CLASSES = [
     RecalibrateEyeDirection,
     HideToonShaderInViewport,
     ShowToonShaderInViewport,
+    LookAtObjectConstraint,
+    ClearLookAtConstraint,
     VRMToRigifyMetarigMainPanel,
     VRMToRigifyMetarigOperatorsPanel,
     VRMToRigifyMetarigUtilitiesPanel,
