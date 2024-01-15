@@ -50,7 +50,7 @@ To recalibrate the eye direction:
 
 1. Select both the Rigify rig and the object you want your character to look at. Make sure the Rigify rig is active (yellow text).
 
-<p align="center"><img src="docs/look_at_selection.png" width="192px"></p>
+<p align="center"><img src="docs/look_at_selection.png" width="304px"></p>
    
 2. Click `Look At Object` under `Utilities` panel.
 
