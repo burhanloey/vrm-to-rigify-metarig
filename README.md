@@ -4,7 +4,7 @@ Generate Rigify armature and metarig from VRM model
 
 ## Requirements
 
-1. [Blender 3.6](https://www.blender.org/download/lts/) or earlier version (does not work on 4.0 and above)
+1. [Blender 3.6](https://www.blender.org/download/lts/) or earlier version (does not work on 4.0 and above, yet)
 2. [VRM Add-on for Blender](https://vrm-addon-for-blender.info/en/)
 
 ## Installation
