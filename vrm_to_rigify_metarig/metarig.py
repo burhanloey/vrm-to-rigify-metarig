@@ -19,7 +19,7 @@ BONE_MAPPING = {
     "head"    : "spine.006",
     "leftEye" : "eye.L",
     "rightEye": "eye.R",
-    "jaw"     : "jaw",  # ignore
+    #"jaw"     : "jaw",  # ignore
 
     # Leg
     "leftUpperLeg" : "thigh.L",
@@ -73,6 +73,39 @@ BONE_MAPPING = {
     "rightLittleIntermediate": "f_pinky.02.R",
     "rightLittleDistal"      : "f_pinky.03.R",
 }
+
+FINGER_BONE_NAMES = [
+    "thumb.01.L",
+    "thumb.02.L",
+    "thumb.03.L",
+    "f_index.01.L",
+    "f_index.02.L",
+    "f_index.03.L",
+    "f_middle.01.L",
+    "f_middle.02.L",
+    "f_middle.03.L",
+    "f_ring.01.L",
+    "f_ring.02.L",
+    "f_ring.03.L",
+    "f_pinky.01.L",
+    "f_pinky.02.L",
+    "f_pinky.03.L",
+    "thumb.01.R",
+    "thumb.02.R",
+    "thumb.03.R",
+    "f_index.01.R",
+    "f_index.02.R",
+    "f_index.03.R",
+    "f_middle.01.R",
+    "f_middle.02.R",
+    "f_middle.03.R",
+    "f_ring.01.R",
+    "f_ring.02.R",
+    "f_ring.03.R",
+    "f_pinky.01.R",
+    "f_pinky.02.R",
+    "f_pinky.03.R",
+]
 
 UNNEEDED_BONES = ["Root"]
 
@@ -305,40 +338,7 @@ def rigify_finger(metarig, bone_name, layers, tweak_layers):
 
 
 def rigify_fingers(metarig, layers, tweak_layers):
-    finger_bone_names = [
-        "thumb.01.L",
-        "thumb.02.L",
-        "thumb.03.L",
-        "f_index.01.L",
-        "f_index.02.L",
-        "f_index.03.L",
-        "f_middle.01.L",
-        "f_middle.02.L",
-        "f_middle.03.L",
-        "f_ring.01.L",
-        "f_ring.02.L",
-        "f_ring.03.L",
-        "f_pinky.01.L",
-        "f_pinky.02.L",
-        "f_pinky.03.L",
-        "thumb.01.R",
-        "thumb.02.R",
-        "thumb.03.R",
-        "f_index.01.R",
-        "f_index.02.R",
-        "f_index.03.R",
-        "f_middle.01.R",
-        "f_middle.02.R",
-        "f_middle.03.R",
-        "f_ring.01.R",
-        "f_ring.02.R",
-        "f_ring.03.R",
-        "f_pinky.01.R",
-        "f_pinky.02.R",
-        "f_pinky.03.R",
-    ]
-    
-    base_finger_bone_names = filter(lambda bone: '01' in bone, finger_bone_names)
+    base_finger_bone_names = filter(lambda bone: '01' in bone, FINGER_BONE_NAMES)
     
     for bone_name in base_finger_bone_names:
         rigify_finger(metarig, bone_name, layers, tweak_layers)

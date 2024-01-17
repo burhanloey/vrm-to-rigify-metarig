@@ -21,6 +21,7 @@ from .utils.ik_stretch import EnableAllIKStretch, DisableAllIKStretch
 from .utils.eye_fix import FixEyeDirection, RecalibrateEyeDirection
 from .utils.modifiers import HideToonShaderInViewport, ShowToonShaderInViewport
 from .utils.look_at import LookAtObjectConstraint, ClearLookAtConstraint
+from .utils.simplify import ExtractBasicSkeleton, ExtractBasicSkeletonWithFingers
 from .metarig import GenerateMetarig
 from .main import OneClickSetup, Regenerate
 
@@ -104,6 +105,10 @@ class VRMToRigifyMetarigUtilitiesPanel(bpy.types.Panel):
         col.operator("vrm_to_rigify_metarig.clear_look_at_constraint")
         
         col = layout.column(align=True)
+        col.operator("vrm_to_rigify_metarig.extract_basic_skeleton")
+        col.operator("vrm_to_rigify_metarig.extract_basic_skeleton_with_fingers")
+        
+        col = layout.column(align=True)
         col.operator("vrm_to_rigify_metarig.show_default_visible_layers")
         col.operator("vrm_to_rigify_metarig.show_all_control_layers")
 
@@ -123,6 +128,8 @@ CLASSES = [
     ShowToonShaderInViewport,
     LookAtObjectConstraint,
     ClearLookAtConstraint,
+    ExtractBasicSkeleton,
+    ExtractBasicSkeletonWithFingers,
     VRMToRigifyMetarigMainPanel,
     VRMToRigifyMetarigOperatorsPanel,
     VRMToRigifyMetarigUtilitiesPanel,
