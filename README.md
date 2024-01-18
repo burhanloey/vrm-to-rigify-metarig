@@ -54,6 +54,12 @@ To recalibrate the eye direction:
    
 2. Click `Look At Object` under `Utilities` panel.
 
+### Animation retargeting
+
+This addon follows the workflow of using [Expy Kit addon](https://github.com/pKrime/Expy-Kit) to do animation retargeting based on [this CGDive's video](https://youtu.be/ars_rEC3oP8?si=d97z7facNhoKuo4C&t=1266).
+
+This addon also provides a utility to extract basic skeleton from the metarig so you can skip the preparation of Mixamo rig as per instructed by CGDive's video (you still need to do the automatic weighting).
+
 ### Other utilities
 
 1. Enable/disable IK stretch for all limbs.
