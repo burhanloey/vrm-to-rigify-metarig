@@ -15,14 +15,13 @@ def extract_basic_skeleton(context, include_fingers=False):
     bpy.ops.object.mode_set(mode='OBJECT')
     
     bpy.ops.object.duplicate()
-    duplicate_rig = context.view_layer.objects.active
-    
     bpy.ops.object.mode_set(mode='EDIT')
     
     bpy.ops.armature.select_all(action='SELECT')
     
     required_bones = get_required_bones(include_fingers)
     
+    # Deselect required bones and delete the selected
     for bone in context.selected_editable_bones:
         if bone.name in required_bones:
             bone.select = False
