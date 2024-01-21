@@ -9,7 +9,7 @@ Generate Rigify armature and the metarig from VRM model
 
 ## Installation
 
-1. Download `vrm_to_rigify_metarig.zip` from [releases page](https://github.com/burhanloey/vrm-to-rigify-metarig/releases/tag/latest).
+1. Download `vrm_to_rigify_metarig.zip` from [releases page](https://github.com/burhanloey/vrm-to-rigify-metarig/releases/latest).
 2. Install the addon in Blender at `Edit` > `Preferences` > `Add-ons`.
 3. Tick the box to enable the addon.
 
